@@ -13,8 +13,11 @@ SITE = "https://jpenberth.com"
 NAME = "J. Penberth Rabold"
 TAG = "Director & Storyteller"
 EMAIL = "jpenberth@jpenberth.com"
-DESC = "J. Penberth Rabold is a Los Angeles director and storyteller: short films, music videos and original stories about human connection."
-NAV = [("/", "Home"), ("/filmography/", "Filmography"), ("/biography/", "Biography"), ("/contact/", "Contact")]
+DESC = "J. Penberth Rabold is a writer and director with 15+ years in Los Angeles film production. Short films, music videos, and Dallas & Allegra, a Rust Belt love story."
+NAV = [("/", "Home"), ("/filmography/", "Filmography"), ("/writing/", "Writing"), ("/biography/", "Biography"), ("/contact/", "Contact")]
+SEEDSPARK = "https://seedandspark.com/fund/dallasallegra"
+SUBSTACK = "https://jpenberth.substack.com"
+DA_SITE = "https://dallasandallegra.com"
 
 # kind: yt / vimeo / none. status: released / coming
 PROJECTS = [
@@ -95,7 +98,9 @@ def ld(obj): return '<script type="application/ld+json">' + json.dumps(obj, ensu
 
 PERSON = {"@context": "https://schema.org", "@type": "Person", "name": NAME, "jobTitle": "Film Director",
           "url": SITE, "email": EMAIL, "image": SITE + "/assets/img/logo-black.png",
-          "sameAs": ["https://vimeo.com/lydianpictures"]}
+          "sameAs": ["https://vimeo.com/lydianpictures", SUBSTACK, DA_SITE],
+          "description": "Writer and director. 15+ years as a unit production manager and first assistant director in Los Angeles; writer of series and features; author of The Writer's Table newsletter.",
+          "knowsAbout": ["Screenwriting", "Film directing", "Short films", "Music videos"]}
 
 def home():
     cards = "".join(card(p) for p in PROJECTS)
@@ -105,7 +110,7 @@ def home():
 <div class="tint"></div><canvas class="tv" aria-hidden="true"></canvas><div class="scan"></div><div class="roll"></div></div>
 <div class="intro"><h1 class="logo"><img src="/assets/img/logo-white.png" alt="{NAME} — Storyteller" width="1515" height="534"></h1></div>
 <main class="sheet"><section class="grid wrap"><h2 class="sr">Selected work</h2>{cards}</section>
-<section class="wrap story"><!-- STORY COPY --></section></main>{footer()}"""
+{story_home()}{da_feature()}{writing_teaser()}</main>{footer()}"""
 
 def filmography():
     cards = "".join(card(p) for p in PROJECTS)
@@ -114,12 +119,19 @@ def filmography():
 
 def biography():
     lst = "".join(f'<li><a href="/projects/{p["slug"]}/"><strong>{esc(p["title"])}</strong></a> <span>{esc(p["year"])}</span><p>{esc(p["log"])}</p></li>' for p in PROJECTS)
-    return head(f"Biography | {NAME}", f"About {NAME}: director and storyteller drawn to stories of human connection and self-empowerment.", "/biography/", ld(PERSON)) + f"""<body>{header('/biography/')}
-<main class="wrap page narrow"><h1>Biography</h1><h2 class="name">{NAME}</h2>
-<p>I believe storytelling is about human connection. Letting my imagination run wild has become one of the most fulfilling parts of my life. Getting behind the camera as a director isn't something that I ever saw in my journey, but now that I have, it influences every aspect of the way I approach the stories I write and direct.</p>
-<p>I'm drawn to stories about the human experience in worlds far beyond our own or the past. Putting characters in situations that require them to discover their own self-empowerment. Stories that create a conversation around the emotions and truth drive us to survive and seek out the love in life.</p>
+    stats = [("15+", "years as a UPM &amp; 1st AD"), ("2×", "Runner-Up, Filmmakers Collaboration Challenge"), ("2nd round", "Austin Film Festival, <em>Ghosts of War</em>"), ("1,000+", "readers of The Writer's Table")]
+    st = "".join(f'<div><b>{a}</b><span>{c}</span></div>' for a, c in stats)
+    return head(f"Biography | {NAME}", f"About {NAME}: a writer and director who spent 15 years running sets in Los Angeles and now makes the stories he writes.", "/biography/", ld(PERSON)) + f"""<body>{header('/biography/')}
+<main class="wrap page narrow"><p class="eyebrow">Biography</p><h1 class="serif">{NAME}</h1>
+<p class="lede">Writer. Director. Storyteller.</p>
+<p>I moved to Los Angeles in 2000 because I wanted to make movies. That was the whole plan. The problem was, I had nothing to say yet. No real voice, no story that was mine. So I learned how movies get made. For fifteen years I worked as a unit production manager and first assistant director, with some editing along the way, on music videos, shorts and features. I learned what a story actually costs once it has to stand up on a set.</p>
+<p>Writing never went away. In 2015 I stopped doing it on the side and made it the job. Since then I've written series bibles, pilots and features that have landed on desks at Netflix, Apple, Starz and HBO. I've come close, and I've come close a lot: a show that went down to the wire, a film that stalled at the finish line. I know exactly what &ldquo;almost&rdquo; feels like. I also know it isn't the end of the story.</p>
+<div class="stats">{st}</div>
+<p>Along the way I directed <a href="/projects/connected/">Connected</a>, a short about a young woman struggling to find an authentic connection with her father in a technologically connected world. It was a Runner-Up for both the Jury Prize and Best Visuals at the 2019 Filmmakers Collaboration Challenge. I developed the series <em>Ghosts of War</em>, a second-round selection at the Austin Film Festival, and I've directed music videos for my friend Jacob Luttrell, including <a href="/projects/way-too-soon/">Way Too Soon</a> and <a href="/projects/familiar-faces/">Familiar Faces</a>.</p>
+<p>I believe storytelling is about human connection. I'm drawn to stories about the human experience, in worlds far beyond our own or the past, where characters are put in situations that force them to discover their own self-empowerment. Stories that start a conversation about emotion and truth, and the love that makes us want to survive.</p>
+<p>Right now that story is <a href="/projects/dallas-and-allegra/">Dallas &amp; Allegra</a>, a Rust Belt Romeo and Juliet, and the first film I'm making by asking the people who believe in it to help get it made. No gatekeeper, no executive across the table. I'm also studying Film &amp; TV Writing at LA Film School and writing <a href="/writing/">The Writer's Table</a>, a newsletter for screenwriters who are trying to finish what they start.</p>
 <p class="quote">Write truth... inspire love.</p>
-<h2>Filmography</h2><ul class="credits">{lst}</ul></main>{footer()}"""
+<h2>Work</h2><ul class="credits">{lst}</ul></main>{footer()}"""
 
 def contact():
     return head(f"Contact | {NAME}", f"Contact director {NAME} for bookings, production and general inquiries.", "/contact/") + f"""<body>{header('/contact/')}
@@ -152,11 +164,74 @@ def project(p):
 <main class="wrap page"><p class="crumb"><a href="/filmography/">← Filmography</a></p><h1>{esc(p["title"])}</h1><p class="meta">{esc(meta)}</p>
 {player}<div class="narrow"><p>{esc(p["log"])}</p><p class="by">Directed by {NAME}</p>{f'<h2>Awards</h2><ul>{awards}</ul>' if awards else ''}</div></main>{footer()}"""
 
+
+import json as _json
+def writing_posts():
+    try: return _json.load(open("data/writing.json", encoding="utf8"))
+    except Exception: return []
+
+def fmt_date(d):
+    import datetime
+    return datetime.date.fromisoformat(d).strftime("%b %-d, %Y")
+
+def story_home():
+    return f"""<section class="wrap story"><p class="eyebrow">Writer · Director</p>
+<h2 class="serif">I tell stories about people trying to find a way to each other.</h2>
+<p>Fifteen years on set as a unit production manager and first AD taught me how movies get made. Writing taught me why. Now I make my own, from short films and music videos to a Rust Belt love story called <a href="/projects/dallas-and-allegra/">Dallas &amp; Allegra</a>.</p>
+<p><a class="more" href="/biography/">Read my story →</a></p></section>"""
+
+def da_feature():
+    return f"""<section class="da"><div class="wrap da-in">
+<a class="da-poster" href="/projects/dallas-and-allegra/"><img src="/assets/img/da/poster-vertical.jpg" alt="Dallas &amp; Allegra — a short film, Love Is Destruction" loading="lazy" width="1087" height="1446"></a>
+<div><p class="eyebrow">Now / Next</p><h2 class="serif">Dallas &amp; Allegra</h2><p class="lede">Love is destruction.</p>
+<p>She's got a plane ticket to Oxford. He's got a safe full of cash and one last score. In a steel town built on dead dreams, they fall for each other anyway, and discover the fastest way out of hell is straight through it, together.</p>
+<p class="btns"><a class="btn" href="/projects/dallas-and-allegra/">The film</a><a class="btn ghost" href="{SEEDSPARK}" rel="noopener">Support it on Seed&amp;Spark</a></p></div></div></section>"""
+
+def writing_teaser():
+    ps = writing_posts()[:3]
+    if not ps: return ""
+    li = "".join(f'<li><a href="{p["url"]}" rel="noopener"><span class="d">{fmt_date(p["date"])}</span><strong>{esc(p["title"])}</strong><span class="b">{esc(p["blurb"])}</span></a></li>' for p in ps)
+    return f"""<section class="wrap wt"><p class="eyebrow">The Writer's Table</p><h2 class="serif">Notes on craft, from the page and the set.</h2><ul class="posts">{li}</ul><p><a class="more" href="/writing/">All writing →</a></p></section>"""
+
+def writing_page():
+    ps = writing_posts()
+    li = "".join(f'<li><a href="{p["url"]}" rel="noopener"><span class="d">{fmt_date(p["date"])}</span><strong>{esc(p["title"])}</strong><span class="b">{esc(p["blurb"])}</span></a></li>' for p in ps)
+    blog = {"@context": "https://schema.org", "@type": "Blog", "name": "The Writer's Table", "url": SUBSTACK, "author": {"@type": "Person", "name": NAME, "url": SITE},
+            "blogPost": [{"@type": "BlogPosting", "headline": p["title"], "url": p["url"], "datePublished": p["date"], "author": {"@type": "Person", "name": NAME}} for p in ps]}
+    return head(f"Writing | {NAME}", "The Writer's Table: screenwriting craft, stakes, structure and the life of a working writer, by J. Penberth Rabold.", "/writing/", ld(blog)) + f"""<body>{header('/writing/')}
+<main class="wrap page narrow"><h1>Writing</h1>
+<p class="lede">I'm a writer first. <em>The Writer's Table</em> is my newsletter for screenwriters and storytellers: how stories work, why scripts fail, and what it takes to keep going. More than a thousand people read it.</p>
+<p class="btns"><a class="btn" href="{SUBSTACK}/subscribe" rel="noopener">Subscribe, it's free</a></p>
+<ul class="posts big">{li}</ul><p><a class="more" href="{SUBSTACK}/archive" rel="noopener">Full archive on Substack →</a></p></main>{footer()}"""
+
+def da_page():
+    path = "/projects/dallas-and-allegra/"
+    stills = "".join(f'<img src="/assets/img/da/{n}.jpg" alt="Dallas &amp; Allegra still: {a}" loading="lazy">' for n, a in (("mill-handoff", "the mill handoff"), ("still-here-street", "Bellvue Falls main street"), ("dallas-mirror", "Dallas in the mirror"), ("lit-window", "a lit window")))
+    team = [("J. Penberth Rabold", "Writer &amp; Director", "Pittsburgh-based writer/director with 15+ years as a director, first assistant director and unit production manager across music videos, shorts and features in Los Angeles. Directed the award-winning short <em>Connected</em>; developed the series <em>Ghosts of War</em>, a second-round selection at the Austin Film Festival."),
+            ("Shannon Geary", "Producer", "Pittsburgh-area producer and set photographer with 21 years as a music educator and theater director before moving into film production."),
+            ("Daniel J. Lennox", "Director of Photography", "Writer/director whose debut feature <em>Jackson's Run</em> won Best Feature at the 2012 CMM Film Festival in New York."),
+            ("Jacob Luttrell", "Music Supervisor", "Grammy-credited songwriter performing as <a href='https://jacobisdead.com/' rel='noopener'>JACOBISDEAD</a>. Composes original music for the film.")]
+    t = "".join(f"<li><strong>{n}</strong><span>{r}</span><p>{d}</p></li>" for n, r, d in team)
+    schema = {"@context": "https://schema.org", "@type": "Movie", "name": "Dallas & Allegra", "alternateName": "Love Is Destruction",
+              "description": "A Rust Belt Romeo and Juliet: a fallen quarterback turned dealer and a steel heiress with a plane ticket to Oxford fall for each other in a dying steel town.",
+              "director": {"@type": "Person", "name": NAME, "url": SITE}, "author": {"@type": "Person", "name": NAME}, "genre": ["Drama", "Romance", "Crime"],
+              "image": SITE + "/assets/img/da/poster-vertical.jpg", "url": SITE + path, "sameAs": [DA_SITE, SEEDSPARK]}
+    return head("Dallas & Allegra: Love Is Destruction | " + NAME, "She's got a plane ticket to Oxford. He's got a safe full of cash and one last score. A Rust Belt Romeo and Juliet, written and directed by J. Penberth Rabold.", path, ld(schema), og_img=SITE + "/assets/img/da/hero-skyline-wide.jpg") + f"""<body class="dapage">{header('/projects/')}
+<section class="dahero"><img src="/assets/img/da/hero-skyline-wide.jpg" alt="Dallas and Allegra silhouetted before a full moon over the Pittsburgh skyline" width="1672" height="941"><div class="shade"></div></section>
+<main class="wrap page narrow dabody"><p class="eyebrow">A short film</p><h1 class="serif">Dallas &amp; Allegra</h1><p class="lede">Love is destruction.</p>
+<p class="btns"><a class="btn" href="{SEEDSPARK}" rel="noopener">Support the film on Seed&amp;Spark</a><a class="btn ghost" href="{DA_SITE}" rel="noopener">dallasandallegra.com</a></p>
+<h2>The story</h2><p>In Bellvue Falls, everyone is addicted to something. Two young star-crossed lovers are about to choose the most dangerous one: each other.</p>
+<p>Dallas Dixon, a fallen quarterback turned dealer, is two payments away from walking out of the only life this town ever offered him. Allegra Cunningham, a trust fund baby and heir to the Cunningham steel fortune, was born on the right side of town and is less than a year from a plane to Oxford.</p>
+<p>Then she tracks him down at a local diner to return her addict mother's Oxy. One late-night conversation later, two people who were never supposed to meet believe they can outrun everything.</p>
+<p class="quote">A Rust Belt Romeo and Juliet about the ones this town lets disappear, and a love that burns hotter than whatever is trying to put it out.</p>
+<div class="stills">{stills}</div>
+<h2>The team</h2><ul class="team">{t}</ul></main>{footer()}"""
+
 def main():
     open("index.html", "w", encoding="utf8").write(home())
-    write("/filmography/", filmography()); write("/biography/", biography()); write("/contact/", contact())
+    write("/filmography/", filmography()); write("/biography/", biography()); write("/contact/", contact()); write("/writing/", writing_page()); write("/projects/dallas-and-allegra/", da_page())
     for p in PROJECTS: write(f"/projects/{p['slug']}/", project(p))
-    urls = ["/", "/filmography/", "/biography/", "/contact/"] + [f"/projects/{p['slug']}/" for p in PROJECTS]
+    urls = ["/", "/filmography/", "/writing/", "/biography/", "/contact/", "/projects/dallas-and-allegra/"] + [f"/projects/{p['slug']}/" for p in PROJECTS]
     open("sitemap.xml", "w").write('<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n' + "".join(f"<url><loc>{SITE}{u}</loc></url>\n" for u in urls) + "</urlset>\n")
     open("robots.txt", "w").write(f"User-agent: *\nAllow: /\nSitemap: {SITE}/sitemap.xml\n")
     json.dump({"cleanUrls": True, "trailingSlash": True, "headers": [{"source": "/assets/(.*)", "headers": [{"key": "Cache-Control", "value": "public, max-age=0, must-revalidate"}]}]}, open("vercel.json", "w"), indent=2)
