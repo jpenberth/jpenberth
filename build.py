@@ -29,13 +29,18 @@ PROJECTS = [
       log="Samuel, who considers himself a true biker, attempts to join the Skull Crushers Bike Club."),
  dict(slug="almost-super", title="Almost Super", year="2020", kind="Pilot Proof of Concept", status="released", img="almost-super.jpg",
       log="An action-comedy pilot proof of concept starring French Stewart, Bryan Dodds and Laur Allen, about a group of wannabe superheroes who team up with a former supervillain to join the International League of Superheroes."),
- dict(slug="toxic-city", title="Toxic City", year="", kind="Album Film", status="coming",
+ dict(slug="new-film", title="NEW FILM TITLE", year="", kind="Film", yt="feY4qLSIRXA", status="released", runtime="",
+      log="TODO(Jason): title and logline for this film."),
+ dict(hidden=True, slug="toxic-city", title="Toxic City", year="", kind="Album Film", status="coming",
       log="A groundbreaking album film experience for the new album “The Stupidity of Validity” from Grammy-winning singer-songwriter Jacob Luttrell."),
- dict(slug="devilwood", title="Devilwood", year="", kind="Feature", status="coming",
+ dict(hidden=True, slug="devilwood", title="Devilwood", year="", kind="Feature", status="coming",
       log="A psychological thriller about three girlfriends on a weekend getaway to repair their fractured friendships, who get sucked into a time portal inside a once-abandoned theme park. Their freedom can only be bought with one thing... blood."),
- dict(slug="dallas-and-allegra", title="Dallas & Allegra", year="", kind="In Development", status="coming",
+ dict(hidden=True, slug="dallas-and-allegra", title="Dallas & Allegra", year="", kind="In Development", status="coming",
       log="TODO(Jason): logline for Dallas & Allegra."),
 ]
+
+ALL_PROJECTS = PROJECTS
+PROJECTS = [p for p in ALL_PROJECTS if not p.get("hidden")]  # hidden ones keep their data but are not built
 
 def esc(s): return html.escape(s, quote=True)
 
