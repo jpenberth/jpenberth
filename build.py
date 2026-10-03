@@ -37,7 +37,7 @@ PROJECTS = [
  dict(slug="almost-super", title="Almost Super", year="2020", kind="Pilot Proof of Concept", status="released", img="almost-super.jpg",
       log="An action-comedy pilot proof of concept starring French Stewart, Bryan Dodds and Laur Allen, about a group of wannabe superheroes who team up with a former supervillain to join the International League of Superheroes."),
  dict(slug="palm-springs-weekend", title="Palm Springs Weekend", year="", kind="Music Video", yt="feY4qLSIRXA", status="released", runtime="",
-      log="Music video for Jacob Luttrell's “Palm Springs Weekend.”"),
+      log="Official music video for Jacob Luttrell's “Palm Springs Weekend.”"),
  dict(hidden=True, slug="toxic-city", title="Toxic City", year="", kind="Album Film", status="coming",
       log="A groundbreaking album film experience for the new album “The Stupidity of Validity” from Grammy-winning singer-songwriter Jacob Luttrell."),
  dict(hidden=True, slug="devilwood", title="Devilwood", year="", kind="Feature", status="coming",
@@ -213,7 +213,10 @@ def writing_teaser():
     li = "".join(f'<li><a href="{p["url"]}" rel="noopener"><span class="d">{fmt_date(p["date"])}</span><strong>{esc(p["title"])}</strong><span class="b">{esc(p["blurb"])}</span></a></li>' for p in ps)
     return f"""<section class="wrap wt"><p class="eyebrow">The Writer's Table</p><h2 class="serif">Notes on craft, from the page and the set.</h2><ul class="posts">{li}</ul><p><a class="more" href="/writing/">All writing →</a></p></section>"""
 
+PODCAST_EPS = [('WwXxVy-aCIQ', 'Writing What You See: Pittsburgh Novelist on Craft & Persistence', 'Patrick McGinty'), ('NxiY7GW6ylU', 'All Your F*cks Disappear at 40 (And Other Truths): Screenwriter Lauren Greenwood on Rejection', 'Lauren Greenwood'), ('o1eX88hF5Gk', 'When Church Breaks You: Pastor JP Robles on Creativity, Faith, and Why God Looks Up From the Bottom', 'JP Robles'), ('L6sN8k8ncDk', 'The Story That Drives Him: Donavan Clark on Passion, Perseverance, and Purpose', 'Donavan Clark'), ('CiraxMcO6k4', 'The Song That Saved His Life: Jacob Luttrell on Pain, Purpose, and Being a Superhero', 'Jacob Luttrell')]
+
 def writing_page():
+    eps_li = "".join(f'<li><a href="https://www.youtube.com/watch?v={i}" rel="noopener"><strong>{esc(t)}</strong><span class="b">Guest: {esc(g)}</span></a></li>' for i, t, g in PODCAST_EPS)
     ps = writing_posts()
     li = "".join(f'<li><a href="{p["url"]}" rel="noopener"><span class="d">{fmt_date(p["date"])}</span><strong>{esc(p["title"])}</strong><span class="b">{esc(p["blurb"])}</span></a></li>' for p in ps)
     blog = {"@context": "https://schema.org", "@type": "Blog", "name": "The Writer's Table", "url": SUBSTACK, "author": {"@type": "Person", "name": NAME, "url": SITE},
@@ -223,7 +226,11 @@ def writing_page():
 <p class="lede">I'm a writer first. <em>The Writer's Table</em> is my newsletter for screenwriters and storytellers: how stories work, why scripts fail, and what it takes to keep going. More than a thousand people read it.</p>
 <p class="btns"><a class="btn" href="{SUBSTACK}/subscribe" rel="noopener">Subscribe, it's free</a></p>
 <ul class="posts big">{li}</ul><p><a class="more" href="{SUBSTACK}/archive" rel="noopener">Full archive on Substack →</a></p>
-<div class="pod"><p class="eyebrow">Podcast</p><p>I also host a podcast, <a href="{YT_PODCAST}" rel="noopener"><strong>What's Ur Why</strong></a>, on YouTube.</p></div></main>{footer()}"""
+<div class="pod"><p class="eyebrow">Podcast</p><h2 class="serif">What's Your Why</h2>
+<p class="lede">What broke you made you beautiful.</p>
+<p>Real conversations with writers, musicians, directors, actors and creators about the fire that drives us, the fear that shapes us, and how both evolve.</p>
+<ul class="posts">{eps_li}</ul>
+<p><a class="more" href="{YT_PODCAST}" rel="noopener">All episodes on YouTube →</a></p></div></main>{footer()}"""
 
 def da_page():
     path = "/projects/dallas-and-allegra/"
