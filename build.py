@@ -100,6 +100,7 @@ PERSON = {"@context": "https://schema.org", "@type": "Person", "name": NAME, "jo
           "url": SITE, "email": EMAIL, "image": SITE + "/assets/img/logo-black.png",
           "sameAs": ["https://vimeo.com/lydianpictures", SUBSTACK, DA_SITE],
           "description": "Writer and director. 15+ years as a unit production manager and first assistant director in Los Angeles; writer of series and features; author of The Writer's Table newsletter.",
+          "homeLocation": [{"@type": "Place", "name": "Los Angeles, CA"}, {"@type": "Place", "name": "Pittsburgh, PA"}],
           "knowsAbout": ["Screenwriting", "Film directing", "Short films", "Music videos"]}
 
 def home():
@@ -207,7 +208,7 @@ def writing_page():
 def da_page():
     path = "/projects/dallas-and-allegra/"
     stills = "".join(f'<img src="/assets/img/da/{n}.jpg" alt="Dallas &amp; Allegra still: {a}" loading="lazy">' for n, a in (("mill-handoff", "the mill handoff"), ("still-here-street", "Bellvue Falls main street"), ("dallas-mirror", "Dallas in the mirror"), ("lit-window", "a lit window")))
-    team = [("J. Penberth Rabold", "Writer &amp; Director", "Pittsburgh-based writer/director with 15+ years as a director, first assistant director and unit production manager across music videos, shorts and features in Los Angeles. Directed the award-winning short <em>Connected</em>; developed the series <em>Ghosts of War</em>, a second-round selection at the Austin Film Festival."),
+    team = [("J. Penberth Rabold", "Writer &amp; Director", "Los Angeles and Pittsburgh-based writer/director with 15+ years as a director, first assistant director and unit production manager across music videos, shorts and features in Los Angeles. Directed the award-winning short <em>Connected</em>; developed the series <em>Ghosts of War</em>, a second-round selection at the Austin Film Festival."),
             ("Shannon Geary", "Producer", "Pittsburgh-area producer and set photographer with 21 years as a music educator and theater director before moving into film production."),
             ("Daniel J. Lennox", "Director of Photography", "Writer/director whose debut feature <em>Jackson's Run</em> won Best Feature at the 2012 CMM Film Festival in New York."),
             ("Jacob Luttrell", "Music Supervisor", "Grammy-credited songwriter performing as <a href='https://jacobisdead.com/' rel='noopener'>JACOBISDEAD</a>. Composes original music for the film.")]

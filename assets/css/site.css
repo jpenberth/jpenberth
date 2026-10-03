@@ -16,9 +16,9 @@ nav a.on,nav a:hover{color:var(--red)}
 .intro{position:relative;z-index:2;height:90.7vh;min-height:520px}
 .logo{position:absolute;margin:0;left:12.5vw;top:45.7vh;width:34vw}
 /* old-TV treatment: live static (canvas), scanlines, rolling band, flicker, vignette. Tune with the vars. */
-.stage{--static:.3;--lines:.4;--flick:.05}
+.stage{--static:.15;--lines:.35;--flick:.03}
 .tv{position:absolute;inset:0;width:100%;height:100%;opacity:var(--static);mix-blend-mode:overlay;pointer-events:none}
-.scan{position:absolute;inset:0;pointer-events:none;opacity:var(--lines);background:repeating-linear-gradient(180deg,rgba(0,0,0,.55) 0 1px,transparent 1px 3px),radial-gradient(ellipse at center,transparent 60%,rgba(0,0,0,.5) 100%)}
+.scan{position:absolute;inset:0;pointer-events:none;opacity:var(--lines);background:radial-gradient(circle at center,rgba(0,0,0,.7) 0 .7px,transparent 1px) 0 0/3px 3px,radial-gradient(ellipse at center,transparent 60%,rgba(0,0,0,.5) 100%)}
 .roll{position:absolute;left:0;right:0;top:0;height:22vh;pointer-events:none;background:linear-gradient(180deg,transparent,rgba(255,235,220,.07) 45%,rgba(255,235,220,.10) 50%,rgba(255,235,220,.07) 55%,transparent);animation:roll 7s linear infinite}
 @keyframes roll{from{transform:translateY(-25vh)}to{transform:translateY(105vh)}}
 .stage::after{content:"";position:absolute;inset:0;background:#000;opacity:0;pointer-events:none;animation:flick .18s steps(2,end) infinite}
