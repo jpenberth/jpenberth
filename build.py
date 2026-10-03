@@ -70,7 +70,7 @@ def footer():
 def card(p):
     t = thumb(p)
     img = f'<img src="{t}" alt="{esc(p["title"])} — {esc(p["kind"])}" loading="lazy">' if t else '<div class="ph"></div>'
-    badge = '<span class="badge">Coming soon</span>' if p["status"] == "coming" else '<span class="play" aria-hidden="true"></span>'
+    badge = '<span class="play" aria-hidden="true"></span>'
     meta = " · ".join(x for x in (p["kind"], p["year"]) if x)
     return f'<a class="card" href="/projects/{p["slug"]}/"><div class="thumb">{img}{badge}</div><h3>{esc(p["title"])}</h3><p>{esc(meta)}</p></a>'
 
@@ -101,7 +101,7 @@ def filmography():
 <main class="wrap page"><h1>Filmography</h1><section class="grid">{cards}</section></main>{footer()}"""
 
 def biography():
-    lst = "".join(f'<li><a href="/projects/{p["slug"]}/"><strong>{esc(p["title"])}</strong></a> <span>{esc(p["year"] or ("Coming soon" if p["status"]=="coming" else ""))}</span><p>{esc(p["log"])}</p></li>' for p in PROJECTS)
+    lst = "".join(f'<li><a href="/projects/{p["slug"]}/"><strong>{esc(p["title"])}</strong></a> <span>{esc(p["year"])}</span><p>{esc(p["log"])}</p></li>' for p in PROJECTS)
     return head(f"Biography | {NAME}", f"About {NAME}: director and storyteller drawn to stories of human connection and self-empowerment.", "/biography/", ld(PERSON)) + f"""<body>{header('/biography/')}
 <main class="wrap page narrow"><h1>Biography</h1><h2 class="name">{NAME}</h2>
 <p>I believe storytelling is about human connection. Letting my imagination run wild has become one of the most fulfilling parts of my life. Getting behind the camera as a director isn't something that I ever saw in my journey, but now that I have, it influences every aspect of the way I approach the stories I write and direct.</p>
@@ -125,7 +125,7 @@ def project(p):
         player = f'<div class="player"><iframe src="https://player.vimeo.com/video/{p["vimeo"]}?dnt=1" title="{esc(p["title"])}" allow="fullscreen; picture-in-picture" allowfullscreen loading="lazy"></iframe></div>'
     else:
         t = thumb(p)
-        player = f'<div class="player still">{"<img src=%s alt=%s>" % (chr(34)+t+chr(34), chr(34)+esc(p["title"])+chr(34)) if t else ""}<span class="badge big">{"Coming soon" if p["status"]=="coming" else "Watch on request"}</span></div>'
+        player = f'<div class="player still">{"<img src=%s alt=%s>" % (chr(34)+t+chr(34), chr(34)+esc(p["title"])+chr(34)) if t else ""}</div>'
     awards = "".join(f"<li>{esc(a)}</li>" for a in p.get("awards", []))
     schema = {"@context": "https://schema.org", "@type": "Movie" if p["kind"] in ("Short Film", "Feature", "Pilot Proof of Concept") else "CreativeWork",
               "name": p["title"], "description": p["log"], "director": {"@type": "Person", "name": NAME, "url": SITE}, "url": SITE + path}
