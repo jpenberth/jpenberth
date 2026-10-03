@@ -89,11 +89,12 @@ def home():
     cards = "".join(card(p) for p in PROJECTS)
     acc = ["Connected — Runner-Up, Jury Prize · Filmmakers Collaboration Challenge 2019", "Connected — Runner-Up, Best Visuals · Filmmakers Collaboration Challenge 2019"]
     return head(f"{NAME} | Film Director & Storyteller", DESC, "/", ld(PERSON)) + f"""<body class="home">{header('/')}
-<section class="hero"><video autoplay muted loop playsinline preload="auto" poster="/assets/img/hero-poster.jpg"><source src="/assets/video/hero.mp4" type="video/mp4"></video>
-<div class="tint"></div><div class="grain"></div>
-<h1 class="logo"><img src="/assets/img/logo-white.png" alt="{NAME} — Storyteller" width="1515" height="534"></h1></section>
-<main><section class="grid wrap"><h2 class="sr">Selected work</h2>{cards}</section>
-<section class="wrap accolades"><h2>Accolades</h2>{''.join(f'<p>{esc(a)}</p>' for a in acc)}</section></main>{footer()}"""
+<div class="stage" aria-hidden="false"><video autoplay muted loop playsinline preload="auto" poster="/assets/img/hero-poster.jpg"><source src="/assets/video/hero.mp4" type="video/mp4"></video>
+<div class="tint"></div><div class="grain"></div><div class="grain g2"></div><div class="vig"></div>
+<h1 class="logo"><img src="/assets/img/logo-white.png" alt="{NAME} — Storyteller" width="1515" height="534"></h1></div>
+<div class="spacer"></div>
+<main class="sheet"><section class="grid wrap"><h2 class="sr">Selected work</h2>{cards}</section>
+<section class="wrap story"><!-- STORY COPY --></section></main>{footer()}"""
 
 def filmography():
     cards = "".join(card(p) for p in PROJECTS)
