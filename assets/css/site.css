@@ -89,3 +89,9 @@ nav{display:none;position:absolute;top:var(--hh);left:0;right:0;background:#000;
 .cred .y{color:var(--mut)}.cred .t{font-family:'Playfair Display',serif;font-size:18px}.cred .t a{text-decoration:underline;text-decoration-color:#555}.cred .t a:hover{color:var(--red)}
 .cred .r{color:#cfcfcf}.cred .k{color:var(--mut);font-size:13px;letter-spacing:.1em;text-transform:uppercase;text-align:right}
 @media(max-width:700px){.cred li{grid-template-columns:70px 1fr;gap:4px 12px}.cred .r{grid-column:2}.cred .k{grid-column:2;text-align:left}}
+
+/* section rhythm on the home page (specific so the generic .wrap padding can't zero it) */
+.sheet .grid{margin-bottom:30px}
+.sheet .story{padding:110px 24px 100px}
+.sheet .wt{padding:100px 24px 110px}
+@media(max-width:700px){.sheet .story{padding:80px 24px 70px}.sheet .wt{padding:70px 24px 80px}}
