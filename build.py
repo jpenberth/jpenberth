@@ -139,7 +139,6 @@ def filmography():
 <main class="wrap page"><h1>Filmography</h1><section class="grid">{cards}</section></main>{footer()}"""
 
 def biography():
-    lst = "".join(f'<li><a href="/projects/{p["slug"]}/"><strong>{esc(p["title"])}</strong></a> <span>{esc(p["year"])}</span><p>{esc(p["log"])}</p></li>' for p in PROJECTS)
     stats = [("15+", "years as a UPM &amp; 1st AD"), ("2×", "Runner-Up, Filmmakers Collaboration Challenge"), ("Round 2", "Austin Film Festival, <em>Ghosts of War</em>"), ("13K+", "followers on Instagram"), ("1,000+", "readers of The Writer's Table")]
     st = "".join(f'<div><b>{a}</b><span>{c}</span></div>' for a, c in stats)
     return head(f"Biography | {NAME}", f"About {NAME}: a writer and director who spent 15 years running sets in Los Angeles and now makes the stories he writes.", "/biography/", ld(PERSON)) + f"""<body>{header('/biography/')}
@@ -152,7 +151,7 @@ def biography():
 <p>I believe storytelling is about human connection. I'm drawn to stories about the human experience, in worlds far beyond our own or the past, where characters are put in situations that force them to discover their own self-empowerment. Stories that start a conversation about emotion and truth, and the love that makes us want to survive.</p>
 <p>Right now that story is <a href="/projects/dallas-and-allegra/">Dallas &amp; Allegra</a>, a Rust Belt Romeo and Juliet, and the first film I'm making by asking the people who believe in it to help get it made. No gatekeeper, no executive across the table. I'm also studying Film &amp; TV Writing at LA Film School and writing <a href="/writing/">The Writer's Table</a>, a newsletter for screenwriters who are trying to finish what they start.</p>
 <p class="quote">Write truth... inspire love.</p>
-<h2>Work</h2><ul class="credits">{lst}</ul><p class="verify"><a href="/credits/">See all credits →</a> &nbsp;·&nbsp; <a href="{IMDB}" rel="me noopener">IMDb</a></p></main>{footer()}"""
+<p class="verify"><a href="/filmography/">See the films →</a> &nbsp;·&nbsp; <a href="/credits/">All credits →</a> &nbsp;·&nbsp; <a href="{IMDB}" rel="me noopener">IMDb</a></p></main>{footer()}"""
 
 def contact():
     return head(f"Contact | {NAME}", f"Contact director {NAME} for bookings, production and general inquiries.", "/contact/") + f"""<body>{header('/contact/')}
