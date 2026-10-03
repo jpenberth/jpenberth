@@ -95,10 +95,10 @@ def header(path):
     return f"""<header class="top"><a class="tag" href="/">[ {TAG.upper()} ]</a>
 <button class="burger" aria-label="Menu" aria-expanded="false"><span></span><span></span></button>
 <nav>{links}</nav>
-<div class="social"><a href="{INSTAGRAM}" aria-label="Instagram" rel="me noopener"><svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" aria-hidden="true"><rect x="3" y="3" width="18" height="18" rx="5"/><circle cx="12" cy="12" r="4.2"/><circle cx="17.3" cy="6.7" r=".6" fill="currentColor"/></svg></a><a href="https://vimeo.com/lydianpictures" aria-label="Vimeo" rel="me noopener"><svg viewBox="0 0 24 24" width="22" height="22" fill="currentColor" aria-hidden="true"><path d="M23.977 6.416c-.105 2.338-1.739 5.543-4.894 9.609-3.268 4.247-6.026 6.37-8.29 6.37-1.409 0-2.578-1.294-3.553-3.881L5.322 11.4C4.603 8.816 3.834 7.522 3.01 7.522c-.179 0-.806.378-1.881 1.132L0 7.197a315.065 315.065 0 0 0 3.501-3.123C5.08 2.701 6.266 1.984 7.055 1.91c1.867-.18 3.016 1.1 3.447 3.838.465 2.953.789 4.789.971 5.507.539 2.45 1.131 3.674 1.776 3.674.502 0 1.256-.796 2.265-2.385 1.004-1.589 1.54-2.797 1.612-3.628.144-1.371-.395-2.061-1.614-2.061-.574 0-1.167.121-1.777.391 1.186-3.868 3.434-5.757 6.762-5.637 2.473.06 3.628 1.664 3.493 4.797z"/></svg></a></div></header>"""
+<div class="social"><a href="{INSTAGRAM}" aria-label="Instagram" rel="me noopener"><svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" aria-hidden="true"><rect x="3" y="3" width="18" height="18" rx="5"/><circle cx="12" cy="12" r="4.2"/><circle cx="17.3" cy="6.7" r=".6" fill="currentColor"/></svg></a><a href="{YT_DIRECTING}" aria-label="YouTube" rel="me noopener"><svg viewBox="0 0 24 24" width="24" height="24" fill="currentColor" aria-hidden="true"><path d="M23.498 6.186a3.016 3.016 0 0 0-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 0 0 .502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 0 0 2.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 0 0 2.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z"/></svg></a></div></header>"""
 
 def footer():
-    links = [("Credits", "/credits/"), ("IMDb", IMDB), ("Instagram", INSTAGRAM), ("YouTube", YT_DIRECTING), ("Podcast", YT_PODCAST), ("Vimeo", VIMEO), ("The Writer's Table", SUBSTACK)]
+    links = [("Credits", "/credits/"), ("IMDb", IMDB), ("Instagram", INSTAGRAM), ("YouTube", YT_DIRECTING), ("Podcast", YT_PODCAST), ("The Writer's Table", SUBSTACK)]
     row = " · ".join(f'<a href="{u}" rel="me noopener">{esc(t)}</a>' for t, u in links)
     return f"""<footer><p class="flinks">{row}</p><p>© {NAME}. <a href="mailto:{EMAIL}">{EMAIL}</a></p></footer><script src="/assets/js/site.js?v={V}" defer></script></body></html>"""
 
@@ -118,7 +118,7 @@ def ld(obj): return '<script type="application/ld+json">' + json.dumps(obj, ensu
 
 PERSON = {"@context": "https://schema.org", "@type": "Person", "name": NAME, "jobTitle": "Film Director",
           "url": SITE, "email": EMAIL, "image": SITE + "/assets/img/logo-black.png",
-          "sameAs": [VIMEO, SUBSTACK, DA_SITE, IMDB, YT_DIRECTING, YT_PODCAST, INSTAGRAM],
+          "sameAs": [SUBSTACK, DA_SITE, IMDB, YT_DIRECTING, YT_PODCAST, INSTAGRAM],
           "description": "Writer and director. 15+ years as a unit production manager and first assistant director in Los Angeles; writer of series and features; author of The Writer's Table newsletter.",
           "homeLocation": [{"@type": "Place", "name": "Los Angeles, CA"}, {"@type": "Place", "name": "Pittsburgh, PA"}],
           "knowsAbout": ["Screenwriting", "Film directing", "Short films", "Music videos"]}
