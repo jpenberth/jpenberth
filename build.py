@@ -140,7 +140,7 @@ def filmography():
 
 def biography():
     lst = "".join(f'<li><a href="/projects/{p["slug"]}/"><strong>{esc(p["title"])}</strong></a> <span>{esc(p["year"])}</span><p>{esc(p["log"])}</p></li>' for p in PROJECTS)
-    stats = [("15+", "years as a UPM &amp; 1st AD"), ("2×", "Runner-Up, Filmmakers Collaboration Challenge"), ("2nd round", "Austin Film Festival, <em>Ghosts of War</em>"), ("1,000+", "readers of The Writer's Table")]
+    stats = [("15+", "years as a UPM &amp; 1st AD"), ("2×", "Runner-Up, Filmmakers Collaboration Challenge"), ("Round 2", "Austin Film Festival, <em>Ghosts of War</em>"), ("13K+", "followers on Instagram"), ("1,000+", "readers of The Writer's Table")]
     st = "".join(f'<div><b>{a}</b><span>{c}</span></div>' for a, c in stats)
     return head(f"Biography | {NAME}", f"About {NAME}: a writer and director who spent 15 years running sets in Los Angeles and now makes the stories he writes.", "/biography/", ld(PERSON)) + f"""<body>{header('/biography/')}
 <main class="wrap page narrow"><p class="eyebrow">Biography</p><h1 class="serif">{NAME}</h1>
