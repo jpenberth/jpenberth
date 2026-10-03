@@ -90,9 +90,8 @@ def home():
     acc = ["Connected — Runner-Up, Jury Prize · Filmmakers Collaboration Challenge 2019", "Connected — Runner-Up, Best Visuals · Filmmakers Collaboration Challenge 2019"]
     return head(f"{NAME} | Film Director & Storyteller", DESC, "/", ld(PERSON)) + f"""<body class="home">{header('/')}
 <div class="stage" aria-hidden="false"><video autoplay muted loop playsinline preload="auto" poster="/assets/img/hero-poster.jpg"><source src="/assets/video/hero.mp4" type="video/mp4"></video>
-<div class="tint"></div><div class="grain"></div><div class="grain g2"></div><div class="vig"></div>
-<h1 class="logo"><img src="/assets/img/logo-white.png" alt="{NAME} — Storyteller" width="1515" height="534"></h1></div>
-<div class="spacer"></div>
+<div class="tint"></div><div class="grain"></div><div class="grain g2"></div></div>
+<div class="intro"><h1 class="logo"><img src="/assets/img/logo-white.png" alt="{NAME} — Storyteller" width="1515" height="534"></h1></div>
 <main class="sheet"><section class="grid wrap"><h2 class="sr">Selected work</h2>{cards}</section>
 <section class="wrap story"><!-- STORY COPY --></section></main>{footer()}"""
 
