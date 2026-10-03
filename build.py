@@ -17,6 +17,10 @@ DESC = "J. Penberth Rabold is a writer and director with 15+ years in Los Angele
 NAV = [("/", "Home"), ("/filmography/", "Filmography"), ("/writing/", "Writing"), ("/biography/", "Biography"), ("/contact/", "Contact")]
 SEEDSPARK = "https://seedandspark.com/fund/dallasallegra"
 SUBSTACK = "https://jpenberth.substack.com"
+IMDB = "https://imdb.me/jpenberthrabold"
+YT_DIRECTING = "https://www.youtube.com/@j.penberthraboldstorytelle7092"
+YT_PODCAST = "https://www.youtube.com/@whatsurwhypodcast"
+VIMEO = "https://vimeo.com/lydianpictures"
 DA_SITE = "https://dallasandallegra.com"
 
 # kind: yt / vimeo / none. status: released / coming
@@ -93,7 +97,9 @@ def header(path):
 <div class="social"><a href="https://www.instagram.com/" aria-label="Instagram" rel="me noopener"><svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" aria-hidden="true"><rect x="3" y="3" width="18" height="18" rx="5"/><circle cx="12" cy="12" r="4.2"/><circle cx="17.3" cy="6.7" r=".6" fill="currentColor"/></svg></a><a href="https://vimeo.com/lydianpictures" aria-label="Vimeo" rel="me noopener"><svg viewBox="0 0 24 24" width="22" height="22" fill="currentColor" aria-hidden="true"><path d="M23.977 6.416c-.105 2.338-1.739 5.543-4.894 9.609-3.268 4.247-6.026 6.37-8.29 6.37-1.409 0-2.578-1.294-3.553-3.881L5.322 11.4C4.603 8.816 3.834 7.522 3.01 7.522c-.179 0-.806.378-1.881 1.132L0 7.197a315.065 315.065 0 0 0 3.501-3.123C5.08 2.701 6.266 1.984 7.055 1.91c1.867-.18 3.016 1.1 3.447 3.838.465 2.953.789 4.789.971 5.507.539 2.45 1.131 3.674 1.776 3.674.502 0 1.256-.796 2.265-2.385 1.004-1.589 1.54-2.797 1.612-3.628.144-1.371-.395-2.061-1.614-2.061-.574 0-1.167.121-1.777.391 1.186-3.868 3.434-5.757 6.762-5.637 2.473.06 3.628 1.664 3.493 4.797z"/></svg></a></div></header>"""
 
 def footer():
-    return f"""<footer><p>© {NAME}. <a href="mailto:{EMAIL}">{EMAIL}</a></p></footer><script src="/assets/js/site.js?v={V}" defer></script></body></html>"""
+    links = [("IMDb", IMDB), ("YouTube", YT_DIRECTING), ("Podcast", YT_PODCAST), ("Vimeo", VIMEO), ("The Writer's Table", SUBSTACK)]
+    row = " · ".join(f'<a href="{u}" rel="me noopener">{esc(t)}</a>' for t, u in links)
+    return f"""<footer><p class="flinks">{row}</p><p>© {NAME}. <a href="mailto:{EMAIL}">{EMAIL}</a></p></footer><script src="/assets/js/site.js?v={V}" defer></script></body></html>"""
 
 def card(p):
     t = thumb(p)
@@ -111,7 +117,7 @@ def ld(obj): return '<script type="application/ld+json">' + json.dumps(obj, ensu
 
 PERSON = {"@context": "https://schema.org", "@type": "Person", "name": NAME, "jobTitle": "Film Director",
           "url": SITE, "email": EMAIL, "image": SITE + "/assets/img/logo-black.png",
-          "sameAs": ["https://vimeo.com/lydianpictures", SUBSTACK, DA_SITE],
+          "sameAs": [VIMEO, SUBSTACK, DA_SITE, IMDB, YT_DIRECTING, YT_PODCAST],
           "description": "Writer and director. 15+ years as a unit production manager and first assistant director in Los Angeles; writer of series and features; author of The Writer's Table newsletter.",
           "homeLocation": [{"@type": "Place", "name": "Los Angeles, CA"}, {"@type": "Place", "name": "Pittsburgh, PA"}],
           "knowsAbout": ["Screenwriting", "Film directing", "Short films", "Music videos"]}
@@ -145,7 +151,7 @@ def biography():
 <p>I believe storytelling is about human connection. I'm drawn to stories about the human experience, in worlds far beyond our own or the past, where characters are put in situations that force them to discover their own self-empowerment. Stories that start a conversation about emotion and truth, and the love that makes us want to survive.</p>
 <p>Right now that story is <a href="/projects/dallas-and-allegra/">Dallas &amp; Allegra</a>, a Rust Belt Romeo and Juliet, and the first film I'm making by asking the people who believe in it to help get it made. No gatekeeper, no executive across the table. I'm also studying Film &amp; TV Writing at LA Film School and writing <a href="/writing/">The Writer's Table</a>, a newsletter for screenwriters who are trying to finish what they start.</p>
 <p class="quote">Write truth... inspire love.</p>
-<h2>Work</h2><ul class="credits">{lst}</ul></main>{footer()}"""
+<h2>Work</h2><ul class="credits">{lst}</ul><p class="verify">Full credits on <a href="{IMDB}" rel="me noopener">IMDb</a>.</p></main>{footer()}"""
 
 def contact():
     return head(f"Contact | {NAME}", f"Contact director {NAME} for bookings, production and general inquiries.", "/contact/") + f"""<body>{header('/contact/')}
@@ -216,7 +222,8 @@ def writing_page():
 <main class="wrap page narrow"><h1>Writing</h1>
 <p class="lede">I'm a writer first. <em>The Writer's Table</em> is my newsletter for screenwriters and storytellers: how stories work, why scripts fail, and what it takes to keep going. More than a thousand people read it.</p>
 <p class="btns"><a class="btn" href="{SUBSTACK}/subscribe" rel="noopener">Subscribe, it's free</a></p>
-<ul class="posts big">{li}</ul><p><a class="more" href="{SUBSTACK}/archive" rel="noopener">Full archive on Substack →</a></p></main>{footer()}"""
+<ul class="posts big">{li}</ul><p><a class="more" href="{SUBSTACK}/archive" rel="noopener">Full archive on Substack →</a></p>
+<div class="pod"><p class="eyebrow">Podcast</p><p>I also host a podcast, <a href="{YT_PODCAST}" rel="noopener"><strong>What's Ur Why</strong></a>, on YouTube.</p></div></main>{footer()}"""
 
 def da_page():
     path = "/projects/dallas-and-allegra/"
