@@ -1,6 +1,13 @@
 #!/usr/bin/env python3
 """Static site generator for jpenberth.com. Run: python3 build.py  (writes HTML into the repo root)."""
-import os, html, json, shutil
+import os, html, json, shutil, hashlib
+
+def ver(*paths):
+    h = hashlib.md5()
+    for p in paths: h.update(open(p, "rb").read())
+    return h.hexdigest()[:8]
+
+V = ver("assets/css/site.css", "assets/js/site.js")
 
 SITE = "https://jpenberth.com"
 NAME = "J. Penberth Rabold"
@@ -54,7 +61,7 @@ def head(title, desc, path, extra="", og_img=None):
 <link rel="icon" href="/assets/img/logo-white.png">
 <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Barlow:wght@300;400&family=Barlow+Condensed:wght@500;600&family=Playfair+Display:ital@0;1&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="/assets/css/site.css">
+<link rel="stylesheet" href="/assets/css/site.css?v={V}">
 {extra}</head>"""
 
 def header(path):
@@ -65,7 +72,7 @@ def header(path):
 <div class="social"><a href="https://www.instagram.com/" aria-label="Instagram" rel="me noopener">IG</a><a href="https://vimeo.com/lydianpictures" aria-label="Vimeo" rel="me noopener">VM</a></div></header>"""
 
 def footer():
-    return f"""<footer><p>© {NAME}. <a href="mailto:{EMAIL}">{EMAIL}</a></p></footer><script src="/assets/js/site.js" defer></script></body></html>"""
+    return f"""<footer><p>© {NAME}. <a href="mailto:{EMAIL}">{EMAIL}</a></p></footer><script src="/assets/js/site.js?v={V}" defer></script></body></html>"""
 
 def card(p):
     t = thumb(p)
@@ -147,7 +154,7 @@ def main():
     urls = ["/", "/filmography/", "/biography/", "/contact/"] + [f"/projects/{p['slug']}/" for p in PROJECTS]
     open("sitemap.xml", "w").write('<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n' + "".join(f"<url><loc>{SITE}{u}</loc></url>\n" for u in urls) + "</urlset>\n")
     open("robots.txt", "w").write(f"User-agent: *\nAllow: /\nSitemap: {SITE}/sitemap.xml\n")
-    json.dump({"cleanUrls": True, "trailingSlash": True, "headers": [{"source": "/assets/(.*)", "headers": [{"key": "Cache-Control", "value": "public, max-age=31536000, immutable"}]}]}, open("vercel.json", "w"), indent=2)
+    json.dump({"cleanUrls": True, "trailingSlash": True, "headers": [{"source": "/assets/(.*)", "headers": [{"key": "Cache-Control", "value": "public, max-age=0, must-revalidate"}]}]}, open("vercel.json", "w"), indent=2)
     print("built", len(urls), "pages")
 
 main()
