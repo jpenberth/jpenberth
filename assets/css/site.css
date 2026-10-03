@@ -75,7 +75,17 @@ footer{position:relative;z-index:2;background:#000;border-top:1px solid #222;pad
 @media(max-width:900px){.top{gap:16px}.burger{display:block}.social{display:none}
 nav{display:none;position:absolute;top:var(--hh);left:0;right:0;background:#000;flex-direction:column;gap:0;padding:8px 24px 20px}nav a{padding:12px 0}
 .top.open nav{display:flex}.tag{font-size:19px}.grid{grid-template-columns:1fr 1fr}}
-@media(max-width:560px){.grid{grid-template-columns:1fr}.logo{left:6vw;width:80vw;top:36vh}@media(prefers-reduced-motion:reduce){.tv,.roll,.stage::after{animation:none}.stage video{display:none}.stage{background:url(/assets/img/hero-poster.jpg) center/cover}}
+@media(max-width:560px){.grid{grid-template-columns:1fr}.logo{left:6vw;width:80vw;top:36vh}.intro{height:78vh}.grid{max-width:none;padding:0 24px}}
+@media(prefers-reduced-motion:reduce){.tv,.roll,.stage::after{animation:none}.stage video{display:none}.stage{background:url(/assets/img/hero-poster.jpg) center/cover}}
 
 .flinks{margin:0 0 10px;letter-spacing:.06em}.flinks a{padding:0 4px}.flinks a:hover{color:var(--red)}
 .pod{margin-top:60px;padding:26px 0;border-top:1px solid #222}.pod p{margin:.2em 0}.verify{margin-top:36px;color:var(--mut)}.verify a{color:var(--red)}
+
+.cred{border-top:1px solid #222}.cred:last-of-type{border-bottom:1px solid #222}
+.cred summary{cursor:pointer;list-style:none;padding:20px 4px;font:600 22px 'Barlow Condensed',sans-serif;letter-spacing:.12em;text-transform:uppercase;display:flex;justify-content:space-between;align-items:center}
+.cred summary::-webkit-details-marker{display:none}.cred summary::after{content:"+";color:var(--red);font-size:28px;font-weight:300}.cred[open] summary::after{content:"–"}
+.cred summary em{font-style:normal;color:var(--mut);font-size:15px;margin-left:12px;margin-right:auto}
+.cred ul{list-style:none;margin:0;padding:0 0 18px}.cred li{display:grid;grid-template-columns:90px 1fr 1.2fr 110px;gap:14px;padding:11px 4px;border-top:1px solid #151515;font-size:16px}
+.cred .y{color:var(--mut)}.cred .t{font-family:'Playfair Display',serif;font-size:18px}.cred .t a{text-decoration:underline;text-decoration-color:#555}.cred .t a:hover{color:var(--red)}
+.cred .r{color:#cfcfcf}.cred .k{color:var(--mut);font-size:13px;letter-spacing:.1em;text-transform:uppercase;text-align:right}
+@media(max-width:700px){.cred li{grid-template-columns:70px 1fr;gap:4px 12px}.cred .r{grid-column:2}.cred .k{grid-column:2;text-align:left}}

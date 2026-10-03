@@ -97,7 +97,7 @@ def header(path):
 <div class="social"><a href="https://www.instagram.com/" aria-label="Instagram" rel="me noopener"><svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" aria-hidden="true"><rect x="3" y="3" width="18" height="18" rx="5"/><circle cx="12" cy="12" r="4.2"/><circle cx="17.3" cy="6.7" r=".6" fill="currentColor"/></svg></a><a href="https://vimeo.com/lydianpictures" aria-label="Vimeo" rel="me noopener"><svg viewBox="0 0 24 24" width="22" height="22" fill="currentColor" aria-hidden="true"><path d="M23.977 6.416c-.105 2.338-1.739 5.543-4.894 9.609-3.268 4.247-6.026 6.37-8.29 6.37-1.409 0-2.578-1.294-3.553-3.881L5.322 11.4C4.603 8.816 3.834 7.522 3.01 7.522c-.179 0-.806.378-1.881 1.132L0 7.197a315.065 315.065 0 0 0 3.501-3.123C5.08 2.701 6.266 1.984 7.055 1.91c1.867-.18 3.016 1.1 3.447 3.838.465 2.953.789 4.789.971 5.507.539 2.45 1.131 3.674 1.776 3.674.502 0 1.256-.796 2.265-2.385 1.004-1.589 1.54-2.797 1.612-3.628.144-1.371-.395-2.061-1.614-2.061-.574 0-1.167.121-1.777.391 1.186-3.868 3.434-5.757 6.762-5.637 2.473.06 3.628 1.664 3.493 4.797z"/></svg></a></div></header>"""
 
 def footer():
-    links = [("IMDb", IMDB), ("YouTube", YT_DIRECTING), ("Podcast", YT_PODCAST), ("Vimeo", VIMEO), ("The Writer's Table", SUBSTACK)]
+    links = [("Credits", "/credits/"), ("IMDb", IMDB), ("YouTube", YT_DIRECTING), ("Podcast", YT_PODCAST), ("Vimeo", VIMEO), ("The Writer's Table", SUBSTACK)]
     row = " · ".join(f'<a href="{u}" rel="me noopener">{esc(t)}</a>' for t, u in links)
     return f"""<footer><p class="flinks">{row}</p><p>© {NAME}. <a href="mailto:{EMAIL}">{EMAIL}</a></p></footer><script src="/assets/js/site.js?v={V}" defer></script></body></html>"""
 
@@ -151,7 +151,7 @@ def biography():
 <p>I believe storytelling is about human connection. I'm drawn to stories about the human experience, in worlds far beyond our own or the past, where characters are put in situations that force them to discover their own self-empowerment. Stories that start a conversation about emotion and truth, and the love that makes us want to survive.</p>
 <p>Right now that story is <a href="/projects/dallas-and-allegra/">Dallas &amp; Allegra</a>, a Rust Belt Romeo and Juliet, and the first film I'm making by asking the people who believe in it to help get it made. No gatekeeper, no executive across the table. I'm also studying Film &amp; TV Writing at LA Film School and writing <a href="/writing/">The Writer's Table</a>, a newsletter for screenwriters who are trying to finish what they start.</p>
 <p class="quote">Write truth... inspire love.</p>
-<h2>Work</h2><ul class="credits">{lst}</ul><p class="verify">Full credits on <a href="{IMDB}" rel="me noopener">IMDb</a>.</p></main>{footer()}"""
+<h2>Work</h2><ul class="credits">{lst}</ul><p class="verify"><a href="/credits/">See all credits →</a> &nbsp;·&nbsp; <a href="{IMDB}" rel="me noopener">IMDb</a></p></main>{footer()}"""
 
 def contact():
     return head(f"Contact | {NAME}", f"Contact director {NAME} for bookings, production and general inquiries.", "/contact/") + f"""<body>{header('/contact/')}
@@ -255,11 +255,76 @@ def da_page():
 <div class="stills">{stills}</div>
 <h2>The team</h2><ul class="team">{t}</ul></main>{footer()}"""
 
+# --- Credits (from IMDb + production resume). (title, year, role, kind, imdb title id or "")
+CREDITS = {
+ "Directing, Writing & Editing": [
+  ("Letter", "2025", "Director, Editor", "Music Video", ""),
+  ("Gone", "2025", "Director, Editor", "Music Video", ""),
+  ("Dallas & Allegra", "Now", "Writer, Director", "Short Film", ""),
+  ("Way Too Soon", "2022", "Director, Editor", "Music Video", ""),
+  ("Palm Springs Weekend", "2022", "Director, Editor", "Music Video", ""),
+  ("Toxic City", "2022", "Director, Writer, Executive Producer", "Feature", "tt13918222"),
+  ("Almost Super", "2020", "Director, Writer, Editor", "Short Film", "tt11851406"),
+  ("Familiar Faces", "2020", "Director, Editor", "Music Video", ""),
+  ("Connected", "2019", "Director, Writer, Editor", "Short Film", "tt44702216"),
+  ("Second Chances", "2015", "Writer", "Short Film", "tt5212564"),
+  ("Dig", "2014", "Writer", "Short Film", "tt4295478"),
+  ("“Baby, Know I Love You” (Solaris)", "2013", "Director, Editor", "Music Video", ""),
+  ("Candy Apple", "2011", "Writer, Co-Producer", "Short Film", "tt2071472"),
+ ],
+ "Production: Unit Production Manager & 1st AD": [
+  ("Room 627", "2026", "Unit Production Manager, 1st AD", "Short Film", ""),
+  ("The Elsewhere", "2021", "1st Assistant Director", "Short Film", "tt13059238"),
+  ("Breaker, Breaker", "2014", "Unit Production Manager", "Short Film", ""),
+  ("Open 24 Hours", "2014", "Unit Production Manager", "Short Film", ""),
+  ("Daytona", "2015", "Unit Production Manager", "Short Film", "tt4048782"),
+  ("The Anniversary", "2015", "Unit Production Manager", "Short Film", "tt4048784"),
+  ("Theodora", "2015", "Assistant Director, Unit Production Manager", "Short Film", "tt4048780"),
+  ("Dig", "2014", "1st AD, Production Manager", "Short Film", "tt4295478"),
+  ("The Toy Soldiers", "2014", "Unit Production Manager", "Feature", "tt2219214"),
+  ("Bamidbar (AFI)", "2014", "Production Manager, Unit Production Manager", "Short Film", "tt3188530"),
+  ("The Hoarder", "2014", "Producer, 1st AD, Unit Production Manager", "Short Film", "tt3530650"),
+  ("Jackson's Run", "2013", "Unit Production Manager, 1st AD", "Feature", "tt2290423"),
+  ("Superficial", "2013", "1st AD, Unit Production Manager", "Short Film", "tt3147278"),
+  ("Billy's 7th Birthday", "2013", "Unit Production Manager, 1st AD", "Short Film", ""),
+  ("Snooze, Charlie", "2011", "Producer, Unit Production Manager, 1st AD", "Short Film", "tt2066971"),
+  ("H1N1", "2011", "Producer, Unit Production Manager, 1st AD", "Short Film", "tt1801510"),
+ ],
+ "Editing & Post-Production": [
+  ("Two Tales of a City", "2014", "Field Producer, Editor", "Television", ""),
+  ("Flipping America (Pilot)", "2014", "Editor", "Television", ""),
+  ("The Evolution of Stem Cell Research", "2012", "Assistant Editor", "Documentary", "tt1713545"),
+  ("Bullproof, Season One", "2011", "Post-Production Supervisor", "Television", "tt1868312"),
+  ("3D Safari: Africa", "2011", "Editor", "Television", "tt1869235"),
+  ("Elena Undone", "2010", "Assistant Editor", "Feature", "tt1575539"),
+ ],
+}
+
+def credits_page():
+    allc = [c for g in CREDITS.values() for c in g]
+    n_total = len({c[0] for c in allc})
+    n_dir = len([c for c in CREDITS["Directing, Writing & Editing"] if "Director" in c[2]])
+    n_prod = len(CREDITS["Production: Unit Production Manager & 1st AD"])
+    stats = [(str(n_total), "credits listed"), (str(n_dir), "directing credits"), (str(n_prod), "UPM / 1st AD credits"), ("2000", "in Los Angeles since")]
+    st = "".join(f'<div><b>{a}</b><span>{c}</span></div>' for a, c in stats)
+    secs = ""
+    for i, (g, rows) in enumerate(CREDITS.items()):
+        li = ""
+        for t, y, r, k, imdb in rows:
+            name = f'<a href="https://www.imdb.com/title/{imdb}/" rel="noopener">{esc(t)}</a>' if imdb else esc(t)
+            li += f'<li><span class="y">{esc(y)}</span><span class="t">{name}</span><span class="r">{esc(r)}</span><span class="k">{esc(k)}</span></li>'
+        secs += f'<details class="cred"{" open" if i == 0 else ""}><summary>{esc(g)} <em>{len(rows)}</em></summary><ul>{li}</ul></details>'
+    return head(f"Credits | {NAME}", f"Complete credits for {NAME}: directing, writing and editing; unit production management and 1st AD; post-production.", "/credits/", ld(PERSON)) + f"""<body>{header('/credits/')}
+<main class="wrap page narrow"><p class="eyebrow">Credits</p><h1 class="serif">The work behind the work.</h1>
+<p class="lede">Fifteen years of running sets and cutting footage before and between the films I direct.</p>
+<div class="stats">{st}</div>{secs}
+<p class="verify">Verified on <a href="{IMDB}" rel="me noopener">IMDb</a>. Titles with an IMDb page link straight to it.</p></main>{footer()}"""
+
 def main():
     open("index.html", "w", encoding="utf8").write(ext_links(home()))
-    write("/filmography/", filmography()); write("/biography/", biography()); write("/contact/", contact()); write("/writing/", writing_page()); write("/projects/dallas-and-allegra/", da_page())
+    write("/filmography/", filmography()); write("/biography/", biography()); write("/contact/", contact()); write("/writing/", writing_page()); write("/credits/", credits_page()); write("/projects/dallas-and-allegra/", da_page())
     for p in PROJECTS: write(f"/projects/{p['slug']}/", project(p))
-    urls = ["/", "/filmography/", "/writing/", "/biography/", "/contact/", "/projects/dallas-and-allegra/"] + [f"/projects/{p['slug']}/" for p in PROJECTS]
+    urls = ["/", "/filmography/", "/writing/", "/credits/", "/biography/", "/contact/", "/projects/dallas-and-allegra/"] + [f"/projects/{p['slug']}/" for p in PROJECTS]
     open("sitemap.xml", "w").write('<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n' + "".join(f"<url><loc>{SITE}{u}</loc></url>\n" for u in urls) + "</urlset>\n")
     open("robots.txt", "w").write(f"User-agent: *\nAllow: /\nSitemap: {SITE}/sitemap.xml\n")
     json.dump({"cleanUrls": True, "trailingSlash": True, "headers": [{"source": "/assets/(.*)", "headers": [{"key": "Cache-Control", "value": "public, max-age=0, must-revalidate"}]}]}, open("vercel.json", "w"), indent=2)
