@@ -45,6 +45,19 @@ PROJECTS = [
 ALL_PROJECTS = PROJECTS
 PROJECTS = [p for p in ALL_PROJECTS if not p.get("hidden")]  # hidden ones keep their data but are not built
 
+import re as _re
+def ext_links(h):
+    """Open every outside http(s) link in a new tab, safely."""
+    def fix(m):
+        tag = m.group(0)
+        if not _re.search(r'href="https?://', tag) or 'target=' in tag: return tag
+        if 'rel="' in tag:
+            tag = _re.sub(r'rel="([^"]*)"', lambda r: 'rel="' + (r.group(1) if 'noopener' in r.group(1) else r.group(1) + ' noopener') + '"', tag, 1)
+        else:
+            tag = tag[:-1] + ' rel="noopener"' + '>'
+        return tag[:-1] + ' target="_blank">'
+    return _re.sub(r'<a\s[^>]*>', fix, h)
+
 def esc(s): return html.escape(s, quote=True)
 
 def thumb(p):
@@ -92,7 +105,7 @@ def card(p):
 def write(path, content):
     d = os.path.join(".", path.strip("/"))
     os.makedirs(d, exist_ok=True)
-    open(os.path.join(d, "index.html"), "w", encoding="utf8").write(content)
+    open(os.path.join(d, "index.html"), "w", encoding="utf8").write(ext_links(content))
 
 def ld(obj): return '<script type="application/ld+json">' + json.dumps(obj, ensure_ascii=False) + "</script>\n"
 
@@ -229,7 +242,7 @@ def da_page():
 <h2>The team</h2><ul class="team">{t}</ul></main>{footer()}"""
 
 def main():
-    open("index.html", "w", encoding="utf8").write(home())
+    open("index.html", "w", encoding="utf8").write(ext_links(home()))
     write("/filmography/", filmography()); write("/biography/", biography()); write("/contact/", contact()); write("/writing/", writing_page()); write("/projects/dallas-and-allegra/", da_page())
     for p in PROJECTS: write(f"/projects/{p['slug']}/", project(p))
     urls = ["/", "/filmography/", "/writing/", "/biography/", "/contact/", "/projects/dallas-and-allegra/"] + [f"/projects/{p['slug']}/" for p in PROJECTS]
