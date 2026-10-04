@@ -32,7 +32,7 @@ PROJECTS = [
       log="A young woman struggles to find an authentic connection with her father in a technologically connected world.",
       awards=["Filmmakers Collaboration Challenge 2019 — Runner-Up, Jury Prize", "Filmmakers Collaboration Challenge 2019 — Runner-Up, Best Visuals"]),
  dict(slug="familiar-faces", title="Familiar Faces", year="2020", kind="Music Video", yt="H98SCB794-o", status="released", runtime="6:11",
-      log="Music video for Grammy-winning singer-songwriter Jacob Luttrell's new single. The album experience movie is in pre-production."),
+      log="Official music video for Jacob Luttrell's “Familiar Faces.”"),
  dict(hidden=True, slug="one-gloved-rider", title="One Gloved Rider", year="2020", kind="Short Film", vimeo="531735478", status="released", runtime="5:18",
       log="Samuel, who considers himself a true biker, attempts to join the Skull Crushers Bike Club."),
  dict(slug="almost-super", title="Almost Super", year="2020", kind="Pilot Proof of Concept", status="released", img="almost-super.jpg",
@@ -44,7 +44,7 @@ PROJECTS = [
  dict(hidden=True, slug="devilwood", title="Devilwood", year="", kind="Feature", status="coming",
       log="A psychological thriller about three girlfriends on a weekend getaway to repair their fractured friendships, who get sucked into a time portal inside a once-abandoned theme park. Their freedom can only be bought with one thing... blood."),
  dict(hidden=True, slug="dallas-and-allegra", title="Dallas & Allegra", year="", kind="In Development", status="coming",
-      log="TODO(Jason): logline for Dallas & Allegra."),
+      log="She's got a plane ticket to Oxford. He's got a safe full of cash and one last score. In a steel town built on dead dreams, they fall for each other anyway."),
 ]
 
 ALL_PROJECTS = PROJECTS
@@ -105,7 +105,7 @@ def footer():
 def card(p):
     t = thumb(p)
     img = f'<img src="{t}" alt="{esc(p["title"])} — {esc(p["kind"])}" loading="lazy">' if t else '<div class="ph"></div>'
-    badge = '<span class="play" aria-hidden="true"></span>'
+    badge = '<span class="play" aria-hidden="true"></span>' if (p.get("yt") or p.get("vimeo")) else ''
     meta = " · ".join(x for x in (p["kind"], p["year"]) if x)
     return f'<a class="card" href="/projects/{p["slug"]}/"><div class="thumb">{img}{badge}</div><h3>{esc(p["title"])}</h3><p>{esc(meta)}</p></a>'
 
