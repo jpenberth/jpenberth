@@ -18,6 +18,7 @@ NAV = [("/", "Home"), ("/filmography/", "Filmography"), ("/writing/", "Writing")
 SEEDSPARK = "https://seedandspark.com/fund/dallasallegra"
 SUBSTACK = "https://jpenberth.substack.com"
 IMDB = "https://www.imdb.com/name/nm2399602/"
+CONTACT_ENDPOINT = ""   # paste the Google Apps Script web-app URL here (see tools/google-apps-script/Code.gs)
 YT_DIRECTING = "https://www.youtube.com/@j.penberthraboldstorytelle7092"
 YT_PODCAST = "https://www.youtube.com/@whatsurwhypodcast"
 VIMEO = "https://vimeo.com/lydianpictures"
@@ -163,12 +164,24 @@ def biography():
 <p class="verify"><a href="/filmography/">See the films →</a> &nbsp;·&nbsp; <a href="/credits/">All credits →</a> &nbsp;·&nbsp; <a href="{IMDB}" rel="me noopener">IMDb</a></p></main>{footer()}"""
 
 def contact():
+    topics = ["Bookings / directing", "Writing / scripts", "Production", "Press", "Something else"]
+    opts = "".join(f"<option>{t}</option>" for t in topics)
     return head(f"Contact | {NAME}", f"Contact director {NAME} for bookings, production and general inquiries.", "/contact/") + f"""<body>{header('/contact/')}
-<main class="wrap page narrow"><h1>Contact</h1>
+<main class="wrap page narrow"><p class="eyebrow">Contact</p><h1 class="serif">Let's talk.</h1>
 <p>Bookings, production and general inquiries:</p>
 <p class="big"><a href="mailto:{EMAIL}">{EMAIL}</a></p>
 <!-- TODO(Jason): add manager / representation details after signing -->
-</main>{footer()}"""
+<h2 class="formh">Or send a message</h2>
+<form id="contact-form" class="cform" data-endpoint="{CONTACT_ENDPOINT}" data-email="{EMAIL}" novalidate>
+<label>Name<input name="name" autocomplete="name" required maxlength="120"></label>
+<label>Email<input name="email" type="email" autocomplete="email" required maxlength="200"></label>
+<label>What's it about?<select name="topic">{opts}</select></label>
+<label>Message<textarea name="message" rows="6" required maxlength="4000"></textarea></label>
+<input class="hp" name="company" tabindex="-1" autocomplete="off" aria-hidden="true">
+<input type="hidden" name="page" value="{SITE}/contact/">
+<button class="btn" type="submit">Send message</button>
+<p class="fmsg" role="status" aria-live="polite"></p>
+</form></main>{footer()}"""
 
 def project(p):
     path = f"/projects/{p['slug']}/"
