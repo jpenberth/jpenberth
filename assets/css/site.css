@@ -95,3 +95,5 @@ nav{display:none;position:absolute;top:var(--hh);left:0;right:0;background:#000;
 .sheet .story{padding:110px 24px 100px}
 .sheet .wt{padding:100px 24px 110px}
 @media(max-width:700px){.sheet .story{padding:80px 24px 70px}.sheet .wt{padding:70px 24px 80px}}
+
+.nf{padding-top:170px;padding-bottom:140px;text-align:left}.nf h1{font-size:clamp(34px,5vw,60px);margin:.15em 0 .3em}

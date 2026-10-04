@@ -71,9 +71,17 @@ def thumb(p):
     if p.get("yt"): return f"https://i.ytimg.com/vi/{p['yt']}/hqdefault.jpg"
     return None
 
+def OG_FOR(path):
+    """pick the share image for a page: its own if one was generated, else the home one"""
+    name = {"/": "og-home.jpg", "/filmography/": "og-filmography.jpg", "/writing/": "og-writing.jpg", "/credits/": "og-credits.jpg",
+            "/biography/": "og-biography.jpg", "/contact/": "og-contact.jpg", "/projects/dallas-and-allegra/": "og-dallas-and-allegra.jpg"}.get(path)
+    if not name and path.startswith("/projects/"):
+        name = "og-" + path.strip("/").split("/")[-1] + ".jpg"
+    return name if name and os.path.exists("assets/img/" + name) else "og-home.jpg"
+
 def head(title, desc, path, extra="", og_img=None):
     url = SITE + path
-    img = og_img or (SITE + "/assets/img/hero-poster.jpg")
+    img = og_img or (SITE + "/assets/img/" + OG_FOR(path))
     return f"""<!doctype html>
 <html lang="en"><head>
 <meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
@@ -83,8 +91,9 @@ def head(title, desc, path, extra="", og_img=None):
 <meta property="og:site_name" content="{NAME}"><meta property="og:type" content="website">
 <meta property="og:title" content="{esc(title)}"><meta property="og:description" content="{esc(desc)}">
 <meta property="og:url" content="{url}"><meta property="og:image" content="{img}">
-<meta name="twitter:card" content="summary_large_image">
-<link rel="icon" href="/assets/img/logo-white.png">
+<meta property="og:image:width" content="1200"><meta property="og:image:height" content="630">
+<meta name="twitter:card" content="summary_large_image"><meta name="twitter:image" content="{img}">
+<link rel="icon" href="/favicon.ico" sizes="any"><link rel="icon" type="image/png" sizes="32x32" href="/assets/img/favicon-32.png"><link rel="apple-touch-icon" href="/assets/img/apple-touch-icon.png">
 <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Barlow:wght@300;400&family=Barlow+Condensed:wght@500;600&family=Playfair+Display:ital@0;1&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="/assets/css/site.css?v={V}">
@@ -180,7 +189,7 @@ def project(p):
                      "thumbnailUrl": f"https://i.ytimg.com/vi/{p['yt']}/hqdefault.jpg", "embedUrl": f"https://www.youtube.com/embed/{p['yt']}",
                      "uploadDate": (p["year"] or "2020") + "-01-01"})
     meta = " · ".join(x for x in (p["kind"], p["year"], p.get("runtime")) if x)
-    return head(f"{p['title']} ({p['kind']}) | {NAME}", p["log"][:155], path, extra, og_img=(SITE + thumb(p)) if thumb(p) and thumb(p).startswith("/") else None) + f"""<body>{header('/filmography/')}
+    return head(f"{p['title']} ({p['kind']}) | {NAME}", p["log"][:155], path, extra, og_img=None) + f"""<body>{header('/filmography/')}
 <main class="wrap page"><p class="crumb"><a href="/filmography/">← Filmography</a></p><h1>{esc(p["title"])}</h1><p class="meta">{esc(meta)}</p>
 {player}<div class="narrow"><p>{esc(p["log"])}</p><p class="by">Directed by {NAME}</p>{f'<h2>Awards</h2><ul>{awards}</ul>' if awards else ''}</div></main>{footer()}"""
 
@@ -244,7 +253,7 @@ def da_page():
               "description": "A Rust Belt Romeo and Juliet: a fallen quarterback turned dealer and a steel heiress with a plane ticket to Oxford fall for each other in a dying steel town.",
               "director": {"@type": "Person", "name": NAME, "url": SITE}, "author": {"@type": "Person", "name": NAME}, "genre": ["Drama", "Romance", "Crime"],
               "image": SITE + "/assets/img/da/poster-vertical.jpg", "url": SITE + path, "sameAs": [DA_SITE, SEEDSPARK]}
-    return head("Dallas & Allegra: Love Is Destruction | " + NAME, "She's got a plane ticket to Oxford. He's got a safe full of cash and one last score. A Rust Belt Romeo and Juliet, written and directed by J. Penberth Rabold.", path, ld(schema), og_img=SITE + "/assets/img/da/hero-skyline-wide.jpg") + f"""<body class="dapage">{header('/projects/')}
+    return head("Dallas & Allegra: Love Is Destruction | " + NAME, "She's got a plane ticket to Oxford. He's got a safe full of cash and one last score. A Rust Belt Romeo and Juliet, written and directed by J. Penberth Rabold.", path, ld(schema)) + f"""<body class="dapage">{header('/projects/')}
 <section class="dahero"><img src="/assets/img/da/hero-skyline-wide.jpg" alt="Dallas and Allegra silhouetted before a full moon over the Pittsburgh skyline" width="1672" height="941"><div class="shade"></div></section>
 <main class="wrap page narrow dabody"><p class="eyebrow">A short film</p><h1 class="serif">Dallas &amp; Allegra</h1><p class="lede">Love is destruction.</p>
 <p class="btns"><a class="btn" href="{SEEDSPARK}" rel="noopener">Support the film on Seed&amp;Spark</a><a class="btn ghost" href="{DA_SITE}" rel="noopener">dallasandallegra.com</a></p>
@@ -320,10 +329,20 @@ def credits_page():
 <div class="stats">{st}</div>{secs}
 <p class="verify">Verified on <a href="{IMDB}" rel="me noopener">IMDb</a>. Titles with an IMDb page link straight to it.</p></main>{footer()}"""
 
+def not_found():
+    html_ = head("Page not found | " + NAME, "That page isn't here.", "/404") + f"""<body>{header('/404')}
+<main class="wrap page narrow nf"><p class="eyebrow">404</p><h1 class="serif">This scene didn't make the final cut.</h1>
+<p class="lede">The page you're looking for isn't here. Let's get you back to the work.</p>
+<p class="btns"><a class="btn" href="/">Home</a><a class="btn ghost" href="/filmography/">Filmography</a><a class="btn ghost" href="/credits/">Credits</a></p></main>{footer()}"""
+    # never index the error page
+    html_ = html_.replace('<link rel="canonical" href="' + SITE + '/404">', '<meta name="robots" content="noindex">')
+    open("404.html", "w", encoding="utf8").write(ext_links(html_))
+
 def main():
     open("index.html", "w", encoding="utf8").write(ext_links(home()))
     write("/filmography/", filmography()); write("/biography/", biography()); write("/contact/", contact()); write("/writing/", writing_page()); write("/credits/", credits_page()); write("/projects/dallas-and-allegra/", da_page())
     for p in PROJECTS: write(f"/projects/{p['slug']}/", project(p))
+    not_found()
     urls = ["/", "/filmography/", "/writing/", "/credits/", "/biography/", "/contact/", "/projects/dallas-and-allegra/"] + [f"/projects/{p['slug']}/" for p in PROJECTS]
     open("sitemap.xml", "w").write('<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n' + "".join(f"<url><loc>{SITE}{u}</loc></url>\n" for u in urls) + "</urlset>\n")
     open("robots.txt", "w").write(f"User-agent: *\nAllow: /\nSitemap: {SITE}/sitemap.xml\n")
