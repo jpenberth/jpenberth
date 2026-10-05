@@ -13,7 +13,7 @@ SITE = "https://jpenberth.com"
 NAME = "J. Penberth Rabold"
 TAG = "Director & Storyteller"
 EMAIL = "jpenberth@jpenberth.com"
-DESC = "J. Penberth Rabold is a writer and director with 15+ years in Los Angeles film production. Short films, music videos, and Dallas & Allegra, a Rust Belt love story."
+DESC = "J. Penberth Rabold is a Los Angeles and Pittsburgh writer-director: short films, music videos, and Dallas & Allegra, a Rust Belt love story."
 NAV = [("/", "Home"), ("/filmography/", "Filmography"), ("/writing/", "Writing"), ("/biography/", "Biography"), ("/contact/", "Contact")]
 SEEDSPARK = "https://seedandspark.com/fund/dallasallegra"
 SUBSTACK = "https://jpenberth.substack.com"
@@ -27,7 +27,7 @@ DA_SITE = "https://dallasandallegra.com"
 
 # kind: yt / vimeo / none. status: released / coming
 PROJECTS = [
- dict(slug="way-too-soon", title="Way Too Soon", year="", kind="Music Video", yt="9kDtB5f8ZFA", status="released",
+ dict(slug="way-too-soon", title="Way Too Soon", year="2022", kind="Music Video", yt="9kDtB5f8ZFA", status="released",
       log="Official music video for Jacob Luttrell's “Way Too Soon.”", runtime="4:36"),
  dict(slug="connected", title="Connected", year="2019", kind="Short Film", yt="T78zgx4-O2k", status="released", runtime="6:19",
       log="A young woman struggles to find an authentic connection with her father in a technologically connected world.",
@@ -38,7 +38,7 @@ PROJECTS = [
       log="Samuel, who considers himself a true biker, attempts to join the Skull Crushers Bike Club."),
  dict(slug="almost-super", title="Almost Super", year="2020", kind="Pilot Proof of Concept", status="released", img="almost-super.jpg",
       log="An action-comedy pilot proof of concept starring French Stewart, Bryan Dodds and Laur Allen, about a group of wannabe superheroes who team up with a former supervillain to join the International League of Superheroes."),
- dict(slug="palm-springs-weekend", title="Palm Springs Weekend", year="", kind="Music Video", yt="feY4qLSIRXA", status="released", runtime="",
+ dict(slug="palm-springs-weekend", title="Palm Springs Weekend", year="2022", kind="Music Video", yt="feY4qLSIRXA", status="released", runtime="",
       log="Official music video for Jacob Luttrell's “Palm Springs Weekend.”"),
  dict(hidden=True, slug="toxic-city", title="Toxic City", year="", kind="Album Film", status="coming",
       log="A groundbreaking album film experience for the new album “The Stupidity of Validity” from Grammy-winning singer-songwriter Jacob Luttrell."),
@@ -79,6 +79,15 @@ def OG_FOR(path):
     if not name and path.startswith("/projects/"):
         name = "og-" + path.strip("/").split("/")[-1] + ".jpg"
     return name if name and os.path.exists("assets/img/" + name) else "og-home.jpg"
+
+def crumbs(*items):
+    """items: (name, path) pairs after Home"""
+    el = [{"@type": "ListItem", "position": 1, "name": "Home", "item": SITE + "/"}]
+    for i, (n, pth) in enumerate(items, 2): el.append({"@type": "ListItem", "position": i, "name": n, "item": SITE + pth})
+    return ld({"@context": "https://schema.org", "@type": "BreadcrumbList", "itemListElement": el})
+
+WEBSITE = {"@context": "https://schema.org", "@type": "WebSite", "@id": SITE + "/#website", "url": SITE + "/", "name": NAME,
+           "description": "Official website of writer and director J. Penberth Rabold.", "inLanguage": "en", "publisher": {"@id": SITE + "/#person"}}
 
 def head(title, desc, path, extra="", og_img=None):
     url = SITE + path
@@ -126,7 +135,8 @@ def write(path, content):
 
 def ld(obj): return '<script type="application/ld+json">' + json.dumps(obj, ensure_ascii=False) + "</script>\n"
 
-PERSON = {"@context": "https://schema.org", "@type": "Person", "name": NAME, "jobTitle": "Film Director",
+PERSON = {"@context": "https://schema.org", "@type": "Person", "@id": SITE + "/#person", "name": NAME,
+          "alternateName": ["Jason Penberth Rabold", "Jason Rabold", "J. Penberth"], "jobTitle": "Film Director",
           "url": SITE, "email": EMAIL, "image": SITE + "/assets/img/logo-black.png",
           "sameAs": [SUBSTACK, DA_SITE, IMDB, YT_DIRECTING, YT_PODCAST, INSTAGRAM],
           "description": "Writer and director. 15+ years as a unit production manager and first assistant director in Los Angeles; writer of series and features; author of The Writer's Table newsletter.",
@@ -136,22 +146,22 @@ PERSON = {"@context": "https://schema.org", "@type": "Person", "name": NAME, "jo
 def home():
     cards = "".join(card(p) for p in PROJECTS)
     acc = ["Connected — Runner-Up, Jury Prize · Filmmakers Collaboration Challenge 2019", "Connected — Runner-Up, Best Visuals · Filmmakers Collaboration Challenge 2019"]
-    return head(f"{NAME} | Film Director & Storyteller", DESC, "/", ld(PERSON)) + f"""<body class="home">{header('/')}
+    return head(f"{NAME} | Los Angeles Film Director & Writer", DESC, "/", ld(PERSON) + ld(WEBSITE) + '<link rel="preload" as="image" href="/assets/img/hero-poster.jpg" fetchpriority="high">\n') + f"""<body class="home">{header('/')}
 <div class="stage" aria-hidden="false"><video autoplay muted loop playsinline preload="auto" poster="/assets/img/hero-poster.jpg"><source src="/assets/video/hero.mp4" type="video/mp4"></video>
 <div class="tint"></div><canvas class="tv" aria-hidden="true"></canvas><div class="scan"></div><div class="roll"></div></div>
-<div class="intro"><h1 class="logo"><img src="/assets/img/logo-white.png" alt="{NAME} — Storyteller" width="1515" height="534"></h1></div>
+<div class="intro"><h1 class="logo"><img src="/assets/img/logo-white.png" alt="{NAME}, film director, screenwriter and storyteller" width="1515" height="534"></h1></div>
 <main class="sheet"><section class="grid wrap"><h2 class="sr">Selected work</h2>{cards}</section>
 {story_home()}{da_feature()}{writing_teaser()}{signup()}</main>{footer()}"""
 
 def filmography():
     cards = "".join(card(p) for p in PROJECTS)
-    return head(f"Filmography | {NAME}", f"Short films, music videos and projects in development by director {NAME}.", "/filmography/") + f"""<body>{header('/filmography/')}
+    return head(f"Films & Music Videos | {NAME}, Director", f"Short films and music videos directed by {NAME}: Connected, Almost Super, Familiar Faces, Way Too Soon and Palm Springs Weekend.", "/filmography/", crumbs(("Filmography", "/filmography/"))) + f"""<body>{header('/filmography/')}
 <main class="wrap page"><h1>Filmography</h1><section class="grid">{cards}</section></main>{footer()}"""
 
 def biography():
     stats = [("15+", "years as a UPM &amp; 1st AD"), (str(sum(len(v) for v in AWARDS.values())), "festival placements &amp; awards, writing and directing"), ("2×", "Austin Film Festival second round, <em>Bathory</em> &amp; <em>Ghosts of War</em>"), ("13K+", "followers on Instagram"), ("1,000+", "readers of The Writer's Table")]
     st = "".join(f'<div><b>{a}</b><span>{c}</span></div>' for a, c in stats)
-    return head(f"Biography | {NAME}", f"About {NAME}: a writer and director who spent 15 years running sets in Los Angeles and now makes the stories he writes.", "/biography/", ld(PERSON)) + f"""<body>{header('/biography/')}
+    return head(f"Biography | {NAME}, Writer & Director", f"About {NAME}: a Los Angeles and Pittsburgh writer and director who spent 15 years running film sets and now makes the stories he writes.", "/biography/", ld(PERSON) + crumbs(("Biography", "/biography/"))) + f"""<body>{header('/biography/')}
 <main class="wrap page narrow"><p class="eyebrow">Biography</p><h1 class="serif">{NAME}</h1>
 <p class="lede">Writer. Director. Storyteller.</p>
 <p>I moved to Los Angeles in 2000 because I wanted to make movies. That was the whole plan. The problem was, I had nothing to say yet. No real voice, no story that was mine. So I learned how movies get made. For fifteen years I worked as a unit production manager and first assistant director, with some editing along the way, on music videos, shorts and features. I learned what a story actually costs once it has to stand up on a set.</p>
@@ -166,7 +176,7 @@ def biography():
 def contact():
     topics = ["Bookings / directing", "Writing / scripts", "Production", "Press", "Something else"]
     opts = "".join(f"<option>{t}</option>" for t in topics)
-    return head(f"Contact | {NAME}", f"Contact director {NAME} for bookings, production and general inquiries.", "/contact/") + f"""<body>{header('/contact/')}
+    return head(f"Contact {NAME} | Bookings & Production", f"Contact writer and director {NAME} for directing bookings, production, writing and press inquiries. Send a message or email directly.", "/contact/", crumbs(("Contact", "/contact/"))) + f"""<body>{header('/contact/')}
 <main class="wrap page narrow"><p class="eyebrow">Contact</p><h1 class="serif">Let's talk.</h1>
 <p>Bookings, production and general inquiries:</p>
 <p class="big"><a href="mailto:{EMAIL}">{EMAIL}</a></p>
@@ -197,12 +207,10 @@ def project(p):
               "name": p["title"], "description": p["log"], "director": {"@type": "Person", "name": NAME, "url": SITE}, "url": SITE + path}
     if p["year"]: schema["dateCreated"] = p["year"]
     extra = ld(schema)
-    if p.get("yt"):
-        extra += ld({"@context": "https://schema.org", "@type": "VideoObject", "name": f"{p['title']} — {NAME}", "description": p["log"],
-                     "thumbnailUrl": f"https://i.ytimg.com/vi/{p['yt']}/hqdefault.jpg", "embedUrl": f"https://www.youtube.com/embed/{p['yt']}",
-                     "uploadDate": (p["year"] or "2020") + "-01-01"})
+    extra += crumbs(("Filmography", "/filmography/"), (p["title"], path))
     meta = " · ".join(x for x in (p["kind"], p["year"], p.get("runtime")) if x)
-    return head(f"{p['title']} ({p['kind']}) | {NAME}", p["log"][:155], path, extra, og_img=None) + f"""<body>{header('/filmography/')}
+    desc_ = p["log"] if len(p["log"]) >= 110 else (p["log"] + f" Directed by {NAME}, Los Angeles film director.")
+    return head(f"{p['title']} ({p['kind']}) | {NAME}", desc_[:155], path, extra, og_img=None) + f"""<body>{header('/filmography/')}
 <main class="wrap page"><p class="crumb"><a href="/filmography/">← Filmography</a></p><h1>{esc(p["title"])}</h1><p class="meta">{esc(meta)}</p>
 {player}<div class="narrow"><p>{esc(p["log"])}</p><p class="by">Directed by {NAME}</p>{f'<h2>Awards</h2><ul>{awards}</ul>' if awards else ''}</div></main>{footer()}"""
 
@@ -251,7 +259,7 @@ def writing_page():
     li = "".join(f'<li><a href="{p["url"]}" rel="noopener"><span class="d">{fmt_date(p["date"])}</span><strong>{esc(p["title"])}</strong><span class="b">{esc(p["blurb"])}</span></a></li>' for p in ps)
     blog = {"@context": "https://schema.org", "@type": "Blog", "name": "The Writer's Table", "url": SUBSTACK, "author": {"@type": "Person", "name": NAME, "url": SITE},
             "blogPost": [{"@type": "BlogPosting", "headline": p["title"], "url": p["url"], "datePublished": p["date"], "author": {"@type": "Person", "name": NAME}} for p in ps]}
-    return head(f"Writing | {NAME}", "The Writer's Table: screenwriting craft, stakes, structure and the life of a working writer, by J. Penberth Rabold.", "/writing/", ld(blog)) + f"""<body>{header('/writing/')}
+    return head(f"Writing & Podcast | {NAME}, Screenwriter", "The Writer's Table newsletter and the What's Your Why podcast: screenwriting craft, structure, stakes and the working writer's life, by J. Penberth Rabold.", "/writing/", ld(blog) + crumbs(("Writing", "/writing/"))) + f"""<body>{header('/writing/')}
 <main class="wrap page narrow"><h1>Writing</h1>
 <p class="lede">I'm a writer first. <em>The Writer's Table</em> is my newsletter for screenwriters and storytellers: how stories work, why scripts fail, and what it takes to keep going. More than a thousand people read it.</p>
 <p class="btns"><a class="btn" href="{SUBSTACK}/subscribe" rel="noopener">Subscribe, it's free</a></p>
@@ -382,11 +390,11 @@ def credits_page():
             name = f'<a href="https://www.imdb.com/title/{imdb}/" rel="noopener">{esc(t)}</a>' if imdb else esc(t)
             li += f'<li><span class="y">{esc(y)}</span><span class="t">{name}</span><span class="r">{esc(r)}</span><span class="k">{esc(k)}</span></li>'
         secs += f'<details class="cred"{" open" if i == 0 else ""}><summary>{esc(g)} <em>{len(rows)}</em></summary><ul>{li}</ul></details>'
-    return head(f"Credits | {NAME}", f"Complete credits for {NAME}: directing, writing and editing; unit production management and 1st AD; post-production.", "/credits/", ld(PERSON)) + f"""<body>{header('/credits/')}
+    return head(f"Credits & Awards | {NAME}, Director", f"Full credits and awards for {NAME}: directing, writing and editing, unit production management, 1st AD work and festival placements.", "/credits/", ld(PERSON) + crumbs(("Credits", "/credits/"))) + f"""<body>{header('/credits/')}
 <main class="wrap page narrow"><p class="eyebrow">Credits</p><h1 class="serif">The work behind the work.</h1>
 <p class="lede">Fifteen years of running sets and cutting footage before and between the films I direct.</p>
 <div class="stats">{st}</div>{secs}{awards_section()}
-<p class="verify">Verified on <a href="{IMDB}" rel="me noopener">IMDb</a>. Titles with an IMDb page link straight to it.</p></main>{footer()}"""
+<p class="verify">Verified on <a href="{IMDB}" rel="me noopener">IMDb</a>, where some credits appear under the name Jason Rabold. Titles with an IMDb page link straight to it.</p></main>{footer()}"""
 
 def not_found():
     html_ = head("Page not found | " + NAME, "That page isn't here.", "/404") + f"""<body>{header('/404')}
@@ -403,7 +411,7 @@ def main():
     for p in PROJECTS: write(f"/projects/{p['slug']}/", project(p))
     not_found()
     urls = ["/", "/filmography/", "/writing/", "/credits/", "/biography/", "/contact/", "/projects/dallas-and-allegra/"] + [f"/projects/{p['slug']}/" for p in PROJECTS]
-    open("sitemap.xml", "w").write('<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n' + "".join(f"<url><loc>{SITE}{u}</loc></url>\n" for u in urls) + "</urlset>\n")
+    open("sitemap.xml", "w").write('<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n' + "".join(f"<url><loc>{SITE}{u}</loc><lastmod>{__import__('datetime').date.today().isoformat()}</lastmod></url>\n" for u in urls) + "</urlset>\n")
     open("robots.txt", "w").write(f"User-agent: *\nAllow: /\nSitemap: {SITE}/sitemap.xml\n")
     json.dump({"cleanUrls": True, "trailingSlash": True, "headers": [{"source": "/assets/(.*)", "headers": [{"key": "Cache-Control", "value": "public, max-age=0, must-revalidate"}]}]}, open("vercel.json", "w"), indent=2)
     print("built", len(urls), "pages")
