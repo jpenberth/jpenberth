@@ -9,7 +9,7 @@ def ver(*paths):
 
 V = ver("assets/css/site.css", "assets/js/site.js")
 
-SITE = "https://jpenberth.com"
+SITE = "https://www.jpenberth.com"   # must match the address Vercel serves (apex redirects to www)
 NAME = "J. Penberth Rabold"
 TAG = "Director & Storyteller"
 EMAIL = "jpenberth@jpenberth.com"

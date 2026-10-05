@@ -1,3 +1,3 @@
 User-agent: *
 Allow: /
-Sitemap: https://jpenberth.com/sitemap.xml
+Sitemap: https://www.jpenberth.com/sitemap.xml
