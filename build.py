@@ -149,7 +149,7 @@ def filmography():
 <main class="wrap page"><h1>Filmography</h1><section class="grid">{cards}</section></main>{footer()}"""
 
 def biography():
-    stats = [("15+", "years as a UPM &amp; 1st AD"), ("2×", "Runner-Up, Filmmakers Collaboration Challenge"), ("2×", "Austin Film Festival second round, <em>Bathory</em> &amp; <em>Ghosts of War</em>"), ("13K+", "followers on Instagram"), ("1,000+", "readers of The Writer's Table")]
+    stats = [("15+", "years as a UPM &amp; 1st AD"), (str(sum(len(v) for v in AWARDS.values())), "festival placements &amp; awards, writing and directing"), ("2×", "Austin Film Festival second round, <em>Bathory</em> &amp; <em>Ghosts of War</em>"), ("13K+", "followers on Instagram"), ("1,000+", "readers of The Writer's Table")]
     st = "".join(f'<div><b>{a}</b><span>{c}</span></div>' for a, c in stats)
     return head(f"Biography | {NAME}", f"About {NAME}: a writer and director who spent 15 years running sets in Los Angeles and now makes the stories he writes.", "/biography/", ld(PERSON)) + f"""<body>{header('/biography/')}
 <main class="wrap page narrow"><p class="eyebrow">Biography</p><h1 class="serif">{NAME}</h1>
