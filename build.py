@@ -330,6 +330,44 @@ CREDITS = {
  ],
 }
 
+# --- Awards & selections: positive results only. (year, competition, result, project)
+AWARDS = {
+ "Films & Music Videos": [
+  ("2019", "Filmmakers Collaboration Challenge", "Runner-Up, Jury Prize", "Connected"),
+  ("2019", "Filmmakers Collaboration Challenge", "Runner-Up, Best Visuals", "Connected"),
+  ("2022", "LWIFF | Lonely Wolf", "Nominee", "Way Too Soon"),
+  ("2022", "Toronto Short Film Festival", "Official Selection", "Way Too Soon"),
+  ("2022", "FlickFair Film Festival", "Official Selection", "Way Too Soon"),
+  ("2022", "FlickFair Film Festival", "Official Selection", "Connected"),
+  ("2022", "Breckenridge Film Festival", "Selected", "Way Too Soon"),
+ ],
+ "Screenplays": [
+  ("2022", "Festigious Los Angeles, Monthly Competition", "Winner", "Caketown"),
+  ("2022", "Festigious Los Angeles, Monthly Competition", "Winner", "Bathory"),
+  ("2022", "RED Movie Awards", "Finalist", "Caketown"),
+  ("2022", "Big Apple Film Festival & Screenplay Competition", "Honorable Mention", "Caketown"),
+  ("2026", "Outstanding Screenplays Feature Competition", "Semi-Finalist", "Winter in Budapest"),
+  ("2026", "3rd Annual Fade In Screenwriting Fellowship", "Semi-Finalist", "Winter in Budapest"),
+  ("2026", "StoryPros Awards Screenplay Contest", "Semi-Finalist", "Winter in Budapest"),
+  ("2022", "Santa Barbara International Screenplay Awards", "Semi-Finalist", "Caketown"),
+  ("2022", "LWIFF | Lonely Wolf", "Semi-Finalist", "Bathory"),
+  ("", "Austin Film Festival Screenwriting Competition", "Second Round", "Bathory"),
+  ("", "Austin Film Festival Screenwriting Competition", "Second Round", "Ghosts of War"),
+  ("2022", "Emerging Creatives", "Selected", "Bathory"),
+  ("2026", "Nashville Film Festival Screenwriting Competition", "Quarter-Finalist", "Winter in Budapest"),
+  ("2022", "Santa Barbara International Screenplay Awards", "Quarter-Finalist", "Bathory"),
+  ("2022", "5th Annual Female Driven Screenwriting Contest", "Quarter-Finalist", "Bathory"),
+ ],
+}
+
+def awards_section():
+    n = sum(len(v) for v in AWARDS.values())
+    out = f'<details class="cred"><summary>Awards &amp; Selections <em>{n}</em></summary>'
+    for g, rows in AWARDS.items():
+        li = "".join(f'<li><span class="y">{esc(y)}</span><span class="t">{esc(c)}</span><span class="r">{esc(r)}</span><span class="k">{esc(p)}</span></li>' for y, c, r, p in rows)
+        out += f'<p class="agroup">{esc(g)}</p><ul>{li}</ul>'
+    return out + "</details>"
+
 def credits_page():
     allc = [c for g in CREDITS.values() for c in g]
     n_total = len({c[0] for c in allc})
@@ -347,7 +385,7 @@ def credits_page():
     return head(f"Credits | {NAME}", f"Complete credits for {NAME}: directing, writing and editing; unit production management and 1st AD; post-production.", "/credits/", ld(PERSON)) + f"""<body>{header('/credits/')}
 <main class="wrap page narrow"><p class="eyebrow">Credits</p><h1 class="serif">The work behind the work.</h1>
 <p class="lede">Fifteen years of running sets and cutting footage before and between the films I direct.</p>
-<div class="stats">{st}</div>{secs}
+<div class="stats">{st}</div>{secs}{awards_section()}
 <p class="verify">Verified on <a href="{IMDB}" rel="me noopener">IMDb</a>. Titles with an IMDb page link straight to it.</p></main>{footer()}"""
 
 def not_found():

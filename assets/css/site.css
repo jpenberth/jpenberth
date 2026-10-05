@@ -113,3 +113,5 @@ nav{display:none;position:absolute;top:var(--hh);left:0;right:0;background:#000;
 .sform{display:flex;gap:10px}.sform input[type=email]{flex:1;min-width:0;background:#000;border:1px solid #2a2a2a;color:#fff;padding:14px;font:300 17px Barlow,Helvetica,Arial,sans-serif;border-radius:0}
 .sform input[type=email]:focus{outline:none;border-color:var(--red)}.sform .btn{cursor:pointer;white-space:nowrap}
 @media(max-width:800px){.sin{grid-template-columns:1fr;gap:24px}.sform{flex-direction:column}.signup{padding:60px 0}}
+
+.agroup{margin:6px 4px 0;font:600 15px 'Barlow Condensed',sans-serif;letter-spacing:.2em;text-transform:uppercase;color:var(--red)}
