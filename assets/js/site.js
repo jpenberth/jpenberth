@@ -19,6 +19,12 @@ if(!v('name')||!v('message')||!/^\S+@\S+\.\S+$/.test(v('email'))){msg.className=
 const ep=f.dataset.endpoint;
 if(!ep){location.href='mailto:'+f.dataset.email+'?subject='+encodeURIComponent((v('topic')||'Message')+' from '+v('name'))+'&body='+encodeURIComponent(v('message')+'\n\n'+v('name')+' <'+v('email')+'>');return}
 btn.disabled=true;msg.textContent='Sending...';
-try{await fetch(ep,{method:'POST',mode:'no-cors',body:new URLSearchParams(d)});f.reset();msg.className='fmsg ok';msg.textContent='Thank you. Your message is on its way.'}
+try{
+if(/formspree\.io/.test(ep)){                              // Formspree: JSON in, real success/error status out
+d.set('_subject','jpenberth.com: '+(v('topic')||'New message')+' from '+v('name'));
+const r=await fetch(ep,{method:'POST',headers:{'Accept':'application/json'},body:d});
+if(!r.ok)throw new Error('formspree '+r.status)}
+else{await fetch(ep,{method:'POST',mode:'no-cors',body:new URLSearchParams(d)})}   // Google Apps Script
+f.reset();msg.className='fmsg ok';msg.textContent='Thank you. Your message is on its way.'}
 catch(err){msg.className='fmsg err';msg.textContent='Something went wrong. Please email '+f.dataset.email+' directly.'}
 finally{btn.disabled=false}})})();
