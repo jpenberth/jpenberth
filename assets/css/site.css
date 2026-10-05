@@ -106,3 +106,10 @@ nav{display:none;position:absolute;top:var(--hh);left:0;right:0;background:#000;
 .cform .hp{position:absolute;left:-9999px;width:1px;height:1px;opacity:0}
 .cform .btn{justify-self:start;cursor:pointer}.cform .btn[disabled]{opacity:.5;cursor:default}
 .fmsg{margin:0;min-height:1.5em;color:var(--mut)}.fmsg.ok{color:#7ad07a}.fmsg.err{color:#ff7a7a}
+
+.signup{background:#0a0807;border-top:1px solid #1d1a18;padding:80px 0;position:relative;z-index:2}
+.sin{max-width:1000px;display:grid;grid-template-columns:1.2fr 1fr;gap:48px;align-items:center}
+.signup h2{font-size:clamp(24px,3vw,34px);margin:.15em 0 .4em}.signup .sub{color:var(--mut);margin:0}
+.sform{display:flex;gap:10px}.sform input[type=email]{flex:1;min-width:0;background:#000;border:1px solid #2a2a2a;color:#fff;padding:14px;font:300 17px Barlow,Helvetica,Arial,sans-serif;border-radius:0}
+.sform input[type=email]:focus{outline:none;border-color:var(--red)}.sform .btn{cursor:pointer;white-space:nowrap}
+@media(max-width:800px){.sin{grid-template-columns:1fr;gap:24px}.sform{flex-direction:column}.signup{padding:60px 0}}

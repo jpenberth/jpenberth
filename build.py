@@ -141,7 +141,7 @@ def home():
 <div class="tint"></div><canvas class="tv" aria-hidden="true"></canvas><div class="scan"></div><div class="roll"></div></div>
 <div class="intro"><h1 class="logo"><img src="/assets/img/logo-white.png" alt="{NAME} — Storyteller" width="1515" height="534"></h1></div>
 <main class="sheet"><section class="grid wrap"><h2 class="sr">Selected work</h2>{cards}</section>
-{story_home()}{da_feature()}{writing_teaser()}</main>{footer()}"""
+{story_home()}{da_feature()}{writing_teaser()}{signup()}</main>{footer()}"""
 
 def filmography():
     cards = "".join(card(p) for p in PROJECTS)
@@ -216,6 +216,14 @@ def fmt_date(d):
     import datetime
     return datetime.date.fromisoformat(d).strftime("%b %-d, %Y")
 
+def signup():
+    return f"""<section class="signup"><div class="wrap sin"><div><p class="eyebrow">Stay in the loop</p><h2 class="serif">Get the newsletter and Dallas &amp; Allegra updates.</h2>
+<p class="sub">Craft notes from The Writer's Table and news as the film comes together. Free. Unsubscribe any time.</p></div>
+<form class="sform" action="{SUBSTACK}/api/v1/free?nojs=true" method="post" target="_blank">
+<input type="hidden" name="source" value="embed"><input type="hidden" name="first_url" value="{SITE}/"><input type="hidden" name="current_url" value="{SITE}/">
+<label class="sr" for="sub-email">Email address</label><input id="sub-email" name="email" type="email" placeholder="Your email" autocomplete="email" required>
+<button class="btn" type="submit">Subscribe</button></form></div></section>"""
+
 def story_home():
     return f"""<section class="wrap story"><p class="eyebrow">Writer · Director</p>
 <h2 class="serif">I tell stories about people trying to find a way to each other.</h2>
@@ -252,7 +260,7 @@ def writing_page():
 <p class="lede">What broke you made you beautiful.</p>
 <p>Real conversations with writers, musicians, directors, actors and creators about the fire that drives us, the fear that shapes us, and how both evolve.</p>
 <ul class="posts">{eps_li}</ul>
-<p><a class="more" href="{YT_PODCAST}" rel="noopener">All episodes on YouTube →</a></p></div></main>{footer()}"""
+<p><a class="more" href="{YT_PODCAST}" rel="noopener">All episodes on YouTube →</a></p></div></main>{signup()}{footer()}"""
 
 def da_page():
     path = "/projects/dallas-and-allegra/"
