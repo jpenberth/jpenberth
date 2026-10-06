@@ -12,7 +12,9 @@ V = ver("assets/css/site.css", "assets/js/site.js")
 SITE = "https://www.jpenberth.com"   # must match the address Vercel serves (apex redirects to www)
 NAME = "J. Penberth Rabold"
 TAG = "Director & Storyteller"
-EMAIL = "jpenberth@jpenberth.com"
+MGR = dict(name="Eva Beadle", company="BSA Talent", url="https://www.bsatalent.com/", email="Eva.Beadle@bsatalent.com",
+           phone="(424) 394-2003", tel="+14243942003", street="468 N Camden Dr #200", city="Beverly Hills", region="CA", zip="90210")
+EMAIL = MGR["email"]   # every public contact point on the site is the manager's
 DESC = "J. Penberth Rabold is a Los Angeles and Pittsburgh writer-director: short films, music videos, and Dallas & Allegra, a Rust Belt love story."
 NAV = [("/", "Home"), ("/filmography/", "Filmography"), ("/writing/", "Writing"), ("/biography/", "Biography"), ("/contact/", "Contact")]
 SEEDSPARK = "https://seedandspark.com/fund/dallasallegra"
@@ -119,7 +121,7 @@ def header(path):
 def footer():
     links = [("Credits", "/credits/"), ("IMDb", IMDB), ("Instagram", INSTAGRAM), ("YouTube", YT_DIRECTING), ("Podcast", YT_PODCAST), ("The Writer's Table", SUBSTACK)]
     row = " · ".join(f'<a href="{u}" rel="me noopener">{esc(t)}</a>' for t, u in links)
-    return f"""<footer><p class="flinks">{row}</p><p>© {NAME}. <a href="mailto:{EMAIL}">{EMAIL}</a></p></footer><script src="/assets/js/site.js?v={V}" defer></script></body></html>"""
+    return f"""<footer><p class="flinks">{row}</p><p>© {NAME}. Represented by {MGR["name"]}, <a href="{MGR["url"]}" rel="noopener">{MGR["company"]}</a> · <a href="mailto:{MGR["email"]}">{MGR["email"]}</a></p></footer><script src="/assets/js/site.js?v={V}" defer></script></body></html>"""
 
 def card(p):
     t = thumb(p)
@@ -137,10 +139,12 @@ def ld(obj): return '<script type="application/ld+json">' + json.dumps(obj, ensu
 
 PERSON = {"@context": "https://schema.org", "@type": "Person", "@id": SITE + "/#person", "name": NAME,
           "alternateName": ["Jason Penberth Rabold", "Jason Rabold", "J. Penberth"], "jobTitle": "Film Director",
-          "url": SITE, "email": EMAIL, "image": SITE + "/assets/img/logo-black.png",
+          "url": SITE, "image": SITE + "/assets/img/logo-black.png",
           "sameAs": [SUBSTACK, DA_SITE, IMDB, YT_DIRECTING, YT_PODCAST, INSTAGRAM],
           "description": "Writer and director. 15+ years as a unit production manager and first assistant director in Los Angeles; writer of series and features; author of The Writer's Table newsletter.",
           "homeLocation": [{"@type": "Place", "name": "Los Angeles, CA"}, {"@type": "Place", "name": "Pittsburgh, PA"}],
+          "contactPoint": {"@type": "ContactPoint", "contactType": "talent management", "name": MGR["name"], "email": MGR["email"], "telephone": MGR["tel"], "url": MGR["url"],
+                           "areaServed": "US", "availableLanguage": "English"},
           "knowsAbout": ["Screenwriting", "Film directing", "Short films", "Music videos"]}
 
 def home():
@@ -176,11 +180,12 @@ def biography():
 def contact():
     topics = ["Bookings / directing", "Writing / scripts", "Production", "Press", "Something else"]
     opts = "".join(f"<option>{t}</option>" for t in topics)
-    return head(f"Contact {NAME} | Bookings & Production", f"Contact writer and director {NAME} for directing bookings, production, writing and press inquiries. Send a message or email directly.", "/contact/", crumbs(("Contact", "/contact/"))) + f"""<body>{header('/contact/')}
+    return head(f"Contact {NAME} | Bookings & Production", f"Contact the management of writer and director {NAME}: Eva Beadle at BSA Talent, Beverly Hills. Or send a message through the form.", "/contact/", crumbs(("Contact", "/contact/"))) + f"""<body>{header('/contact/')}
 <main class="wrap page narrow"><p class="eyebrow">Contact</p><h1 class="serif">Let's talk.</h1>
-<p>Bookings, production and general inquiries:</p>
-<p class="big"><a href="mailto:{EMAIL}">{EMAIL}</a></p>
-<!-- TODO(Jason): add manager / representation details after signing -->
+<p>For bookings, production, writing and press inquiries, please contact my manager:</p>
+<div class="mgr"><p class="mname">{MGR["name"]}</p><p class="mco"><a href="{MGR["url"]}" rel="noopener">{MGR["company"]}</a></p>
+<p><a href="mailto:{MGR["email"]}">{MGR["email"]}</a><br><a href="tel:{MGR["tel"]}">{MGR["phone"]}</a></p>
+<p class="addr">{MGR["street"]}<br>{MGR["city"]}, {MGR["region"]} {MGR["zip"]}</p></div>
 <h2 class="formh">Or send a message</h2>
 <form id="contact-form" class="cform" data-endpoint="{CONTACT_ENDPOINT}" data-email="{EMAIL}" novalidate>
 <label>Name<input name="name" autocomplete="name" required maxlength="120"></label>

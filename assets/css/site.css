@@ -115,3 +115,8 @@ nav{display:none;position:absolute;top:var(--hh);left:0;right:0;background:#000;
 @media(max-width:800px){.sin{grid-template-columns:1fr;gap:24px}.sform{flex-direction:column}.signup{padding:60px 0}}
 
 .agroup{margin:6px 4px 0;font:600 15px 'Barlow Condensed',sans-serif;letter-spacing:.2em;text-transform:uppercase;color:var(--red)}
+
+.mgr{border-left:2px solid var(--red);padding:6px 0 6px 22px;margin:26px 0 8px}.mgr p{margin:.15em 0}
+.mgr .mname{font:400 28px 'Playfair Display',serif}.mgr .mco{font:600 17px 'Barlow Condensed',sans-serif;letter-spacing:.16em;text-transform:uppercase}
+.mgr a{color:var(--red)}.mgr a:hover{text-decoration:underline}.mgr .addr{color:var(--mut);margin-top:.7em}
+footer p a[href^="mailto"]{color:inherit}
