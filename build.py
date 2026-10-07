@@ -24,6 +24,7 @@ CONTACT_ENDPOINT = "https://formspree.io/f/meaeqzvb"   # paste the Google Apps S
 YT_DIRECTING = "https://www.youtube.com/@j.penberthraboldstorytelle7092"
 YT_PODCAST = "https://www.youtube.com/@whatsurwhypodcast"
 VIMEO = "https://vimeo.com/lydianpictures"
+CATALYSTORY = "https://catalystory.com/"
 INSTAGRAM = "https://www.instagram.com/jpenberthstoryteller/"
 DA_SITE = "https://dallasandallegra.com"
 
@@ -140,7 +141,8 @@ def ld(obj): return '<script type="application/ld+json">' + json.dumps(obj, ensu
 PERSON = {"@context": "https://schema.org", "@type": "Person", "@id": SITE + "/#person", "name": NAME,
           "alternateName": ["Jason Penberth Rabold", "Jason Rabold", "J. Penberth"], "jobTitle": "Film Director",
           "url": SITE, "image": SITE + "/assets/img/logo-black.png",
-          "sameAs": [SUBSTACK, DA_SITE, IMDB, YT_DIRECTING, YT_PODCAST, INSTAGRAM],
+          "sameAs": [SUBSTACK, DA_SITE, IMDB, YT_DIRECTING, YT_PODCAST, INSTAGRAM, CATALYSTORY],
+          "worksFor": {"@type": "Organization", "name": "Catalystory", "url": CATALYSTORY},
           "description": "Writer and director. 15+ years as a unit production manager and first assistant director in Los Angeles; writer of series and features; author of The Writer's Table newsletter.",
           "homeLocation": [{"@type": "Place", "name": "Los Angeles, CA"}, {"@type": "Place", "name": "Pittsburgh, PA"}],
           "contactPoint": {"@type": "ContactPoint", "contactType": "talent management", "name": MGR["name"], "email": MGR["email"], "telephone": MGR["tel"], "url": MGR["url"],
@@ -175,7 +177,7 @@ def biography():
 <p>I believe storytelling is about human connection. I'm drawn to stories about the human experience, in worlds far beyond our own or the past, where characters are put in situations that force them to discover their own self-empowerment. Stories that start a conversation about emotion and truth, and the love that makes us want to survive.</p>
 <p>Right now that story is <a href="/projects/dallas-and-allegra/">Dallas &amp; Allegra</a>, a Rust Belt Romeo and Juliet, and the first film I'm making by asking the people who believe in it to help get it made. No gatekeeper, no executive across the table. I'm also studying Film &amp; TV Writing at LA Film School and writing <a href="/writing/">The Writer's Table</a>, a newsletter for screenwriters who are trying to finish what they start.</p>
 <p class="quote">Write truth... inspire love.</p>
-<p class="verify"><a href="/filmography/">See the films →</a> &nbsp;·&nbsp; <a href="/credits/">All credits →</a> &nbsp;·&nbsp; <a href="{IMDB}" rel="me noopener">IMDb</a></p></main>{footer()}"""
+<p class="verify"><a href="/filmography/">See the films →</a> &nbsp;·&nbsp; <a href="/credits/">All credits →</a> &nbsp;·&nbsp; <a href="{IMDB}" rel="me noopener">IMDb</a> &nbsp;·&nbsp; <a href="{CATALYSTORY}" rel="noopener">Catalystory</a></p></main>{footer()}"""
 
 def contact():
     topics = ["Bookings / directing", "Writing / scripts", "Production", "Press", "Something else"]
@@ -186,6 +188,7 @@ def contact():
 <div class="mgr"><p class="mname">{MGR["name"]}</p><p class="mco"><a href="{MGR["url"]}" rel="noopener">{MGR["company"]}</a></p>
 <p><a href="mailto:{MGR["email"]}">{MGR["email"]}</a><br><a href="tel:{MGR["tel"]}">{MGR["phone"]}</a></p>
 <p class="addr">{MGR["street"]}<br>{MGR["city"]}, {MGR["region"]} {MGR["zip"]}</p></div>
+<p class="prod">My production company: <a href="{CATALYSTORY}" rel="noopener">Catalystory</a></p>
 <h2 class="formh">Or send a message</h2>
 <form id="contact-form" class="cform" data-endpoint="{CONTACT_ENDPOINT}" data-email="{EMAIL}" novalidate>
 <label>Name<input name="name" autocomplete="name" required maxlength="120"></label>
