@@ -171,13 +171,37 @@ def bio_short():
         f"""<p>After moving to Los Angeles in 2000, Penberth spent 15 years as a unit production manager and first assistant director before shifting to writing and directing in 2015. His work has earned {n_aw} festival placements and awards, including two second-round selections at the Austin Film Festival for <em>Bathory</em> and <em>Ghosts of War</em>. He is currently developing <a href="/projects/dallas-and-allegra/">Dallas &amp; Allegra</a>, a contemporary Rust Belt reimagining of Romeo and Juliet, which he wrote and will direct.</p>""",
     ]
 
+import os as _os
+HERO_STYLE = _os.environ.get("HERO", "portrait")   # "portrait" (Eva) or "brand" (logo title card)
+TAGLINE = "Stories about the choices that define us, the connections that shape us, and the lengths we'll go to for the things we love."
+KICKER = "Writer &nbsp;|&nbsp; Director &nbsp;|&nbsp; Filmmaker"
+
+def hero_portrait():
+    """Option A: the first thing anyone sees is the portrait, with the name, titles and a short intro."""
+    return f"""<section class="phero"><figure class="pfig"><img src="/assets/img/headshot.jpg" alt="Black-and-white portrait of {NAME}, writer and director" width="900" height="1266" fetchpriority="high"></figure>
+<div class="ptxt"><p class="eyebrow">{KICKER}</p>
+<h1 class="plogo"><img src="/assets/img/logo-white.png" alt="{NAME}, film director, screenwriter and storyteller" width="1515" height="534"></h1>
+<p class="lede">{TAGLINE}</p>
+{"".join(bio_short())}
+<p class="btns"><a class="btn" href="/biography/">Read my story</a></p></div></section>"""
+
+def hero_brand():
+    """Option B: no photo or video up top, just the signature as a title card with film grain; the portrait follows below."""
+    return f"""<section class="bhero"><canvas class="tv" aria-hidden="true"></canvas><div class="scan"></div><div class="roll"></div>
+<div class="bin"><h1 class="blogo"><img src="/assets/img/logo-white.png" alt="{NAME}, film director, screenwriter and storyteller" width="1515" height="534" fetchpriority="high"></h1>
+<p class="eyebrow">{KICKER}</p><p class="blede">{TAGLINE}</p></div><a class="cue" href="#about" aria-label="Scroll to the introduction">&darr;</a></section>
+<section class="about" id="about"><div class="wrap ab">
+<figure class="shot"><img src="/assets/img/headshot.jpg" alt="Black-and-white portrait of {NAME}, writer and director" width="900" height="1266" loading="lazy"></figure>
+<div class="abt"><h2 class="serif nm">{NAME}</h2>
+{"".join(bio_short())}
+<p class="btns"><a class="btn" href="/biography/">Read my story</a></p></div></div></section>"""
+
 def about_home():
     return f"""<section class="about"><div class="wrap ab">
 <figure class="shot"><img src="/assets/img/headshot.jpg" alt="Black-and-white portrait of {NAME}, writer and director" width="900" height="1266" loading="lazy"></figure>
 <div class="abt"><p class="eyebrow">Writer &nbsp;|&nbsp; Director &nbsp;|&nbsp; Filmmaker</p><h2 class="serif nm">{NAME}</h2>
 <p class="lede">Stories about the choices that define us, the connections that shape us, and the lengths we'll go to for the things we love.</p>
 {"".join(bio_short())}
-<p class="rep">Represented by {MGR["name"]} &nbsp;|&nbsp; <a href="{MGR["url"]}" rel="noopener">{MGR["company"]}</a></p>
 <p class="btns"><a class="btn" href="/biography/">Read my story</a></p></div></div></section>"""
 
 def broken_band():
@@ -191,12 +215,11 @@ def slate_teaser():
     return f"""<section class="wrap slt"><p class="eyebrow">The Writing</p><h2 class="serif">Original film and television.</h2><ul class="tiles">{li}</ul><p><a class="more" href="/writing/">See the slate →</a></p></section>"""
 
 def home():
-    acc = ["Connected — Runner-Up, Jury Prize · Filmmakers Collaboration Challenge 2019", "Connected — Runner-Up, Best Visuals · Filmmakers Collaboration Challenge 2019"]
-    return head(f"{NAME} | Los Angeles Film Director & Writer", DESC, "/", ld(PERSON) + ld(WEBSITE) + '<link rel="preload" as="image" href="/assets/img/hero-poster.jpg" fetchpriority="high">\n') + f"""<body class="home">{header('/')}
-<div class="stage" aria-hidden="false"><video autoplay muted loop playsinline preload="auto" poster="/assets/img/hero-poster.jpg"><source src="/assets/video/hero.mp4" type="video/mp4"></video>
-<div class="tint"></div><canvas class="tv" aria-hidden="true"></canvas><div class="scan"></div><div class="roll"></div></div>
-<div class="intro"><h1 class="logo"><img src="/assets/img/logo-white.png" alt="{NAME}, film director, screenwriter and storyteller" width="1515" height="534"></h1></div>
-<main class="sheet plain">{about_home()}{broken_band()}{da_feature()}{slate_teaser()}{signup()}</main>{footer()}"""
+    acc = []
+    hero = hero_portrait() if HERO_STYLE == "portrait" else hero_brand()
+    pre = '<link rel="preload" as="image" href="/assets/img/headshot.jpg" fetchpriority="high">\n' if HERO_STYLE == "portrait" else ""
+    return head(f"{NAME} | Los Angeles Film Director & Writer", DESC, "/", ld(PERSON) + ld(WEBSITE) + pre) + f"""<body class="home nohero">{header('/')}
+<main class="sheet plain">{hero}{broken_band()}{da_feature()}{slate_teaser()}{signup()}</main>{footer()}"""
 
 def filmography():
     cards = "".join(card(p) for p in PROJECTS)
@@ -213,7 +236,6 @@ def biography():
 {_bio[0]}{_bio[1]}{_bio[2]}
 <div class="stats">{st}</div>
 {_bio[3]}{_bio[4]}{_bio[5]}
-<p class="rep bio-rep">Represented by {MGR["name"]} &nbsp;|&nbsp; <a href="{MGR["url"]}" rel="noopener">{MGR["company"]}</a></p>
 <p class="quote">Write truth... inspire love.</p>
 <p class="verify"><a href="/filmography/">See the films →</a> &nbsp;·&nbsp; <a href="/credits/">All credits →</a> &nbsp;·&nbsp; <a href="{IMDB}" rel="me noopener">IMDb</a> &nbsp;·&nbsp; <a href="{CATALYSTORY}" rel="noopener">Catalystory</a></p>
 </main>{footer()}"""

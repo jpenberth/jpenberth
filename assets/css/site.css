@@ -161,3 +161,23 @@ footer p a[href^="mailto"]{color:inherit}
 @media(max-width:700px){.broken{padding-bottom:80px}.broken .bl{font-size:18px}.broken .bq{font-size:20px}}
 
 .bio-rep{color:var(--mut);font:600 15px 'Barlow Condensed',sans-serif;letter-spacing:.18em;text-transform:uppercase;margin-top:2em}.bio-rep a{color:var(--red)}
+
+/* --- hero options (no video) --- */
+.nohero .sheet{margin-top:0}
+.phero{display:grid;grid-template-columns:1fr 1fr;min-height:100vh;padding-top:var(--hh);background:#000}
+.pfig{margin:0;position:relative;overflow:hidden;min-height:60vh}
+.pfig img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:50% 14%}
+.pfig::after{content:"";position:absolute;inset:0;background:linear-gradient(90deg,rgba(0,0,0,0) 62%,#000 100%)}
+.ptxt{align-self:center;padding:56px max(4vw,28px) 56px 3vw;max-width:680px}
+.ptxt .eyebrow{letter-spacing:.3em}
+.plogo{margin:.2em 0 .5em;width:min(440px,100%)}.plogo img{width:100%;height:auto;display:block}
+.ptxt .lede{color:#eee;margin:0 0 1.1em}.ptxt p{margin:0 0 1em}.ptxt .btns{margin-top:1.4em}
+.bhero{--static:.16;--lines:.3;--flick:.02;position:relative;min-height:100vh;padding-top:var(--hh);display:flex;align-items:center;justify-content:center;text-align:center;overflow:hidden;background:#000}
+.bhero .scan{background:radial-gradient(ellipse at center,transparent 45%,rgba(0,0,0,.75) 100%)}
+.bin{position:relative;z-index:2;padding:0 24px;max-width:900px}
+.blogo{margin:0 auto .4em;width:min(720px,84vw)}.blogo img{width:100%;height:auto;display:block}
+.bin .eyebrow{letter-spacing:.38em;margin:0 0 1.2em}.blede{font:italic 400 clamp(18px,2vw,24px)/1.55 'Playfair Display',serif;color:#ddd;max-width:640px;margin:0 auto}
+.cue{position:absolute;left:50%;bottom:28px;transform:translateX(-50%);color:#777;font-size:26px;z-index:2;animation:cue 2.4s ease-in-out infinite}
+@keyframes cue{50%{transform:translate(-50%,8px);color:#fff}}
+@media(max-width:900px){.phero{grid-template-columns:1fr}.pfig{height:68vh;min-height:0}.pfig::after{background:linear-gradient(180deg,rgba(0,0,0,0) 60%,#000 100%)}.ptxt{padding:30px 24px 60px;max-width:none}}
+@media(prefers-reduced-motion:reduce){.cue{animation:none}}
