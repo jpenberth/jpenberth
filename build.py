@@ -172,7 +172,7 @@ def bio_short():
     ]
 
 import os as _os
-HERO_STYLE = _os.environ.get("HERO", "portrait")   # "portrait" (Eva) or "brand" (logo title card)
+HERO_STYLE = _os.environ.get("HERO", "combo")   # "combo" (published): title card then portrait into bio. Others: "portrait", "brand"
 TAGLINE = "Stories about the choices that define us, the connections that shape us, and the lengths we'll go to for the things we love."
 KICKER = "Writer &nbsp;|&nbsp; Director &nbsp;|&nbsp; Filmmaker"
 
