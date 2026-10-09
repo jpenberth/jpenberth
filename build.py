@@ -164,6 +164,12 @@ def about_home():
 <p class="rep">Represented by {MGR["name"]} &nbsp;|&nbsp; <a href="{MGR["url"]}" rel="noopener">{MGR["company"]}</a></p>
 <p class="btns"><a class="btn" href="/biography/">Read my story</a></p></div></div></section>"""
 
+def broken_band():
+    """The Catalystory idea, in its own words (from catalystory.com)."""
+    return """<section class="broken"><div class="wrap"><h2 class="serif">Broken is beautiful.</h2>
+<p class="bl">Every one of us has been broken, and that's the one thread we all share.</p>
+<p class="bq">What if broken is where the story begins?</p></div></section>"""
+
 def slate_teaser():
     li = "".join(f'<li><a href="/writing/"><span class="g">{esc(s["format"])} &middot; {esc(s["genre"])}</span><strong>{esc(s["title"])}</strong></a></li>' for s in SLATE)
     return f"""<section class="wrap slt"><p class="eyebrow">The Writing</p><h2 class="serif">Original film and television.</h2><ul class="tiles">{li}</ul><p><a class="more" href="/writing/">See the slate →</a></p></section>"""
@@ -174,7 +180,7 @@ def home():
 <div class="stage" aria-hidden="false"><video autoplay muted loop playsinline preload="auto" poster="/assets/img/hero-poster.jpg"><source src="/assets/video/hero.mp4" type="video/mp4"></video>
 <div class="tint"></div><canvas class="tv" aria-hidden="true"></canvas><div class="scan"></div><div class="roll"></div></div>
 <div class="intro"><h1 class="logo"><img src="/assets/img/logo-white.png" alt="{NAME}, film director, screenwriter and storyteller" width="1515" height="534"></h1></div>
-<main class="sheet plain">{about_home()}{da_feature()}{slate_teaser()}{signup()}</main>{footer()}"""
+<main class="sheet plain">{about_home()}{broken_band()}{da_feature()}{slate_teaser()}{signup()}</main>{footer()}"""
 
 def filmography():
     cards = "".join(card(p) for p in PROJECTS)
