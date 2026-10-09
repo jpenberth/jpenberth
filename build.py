@@ -500,11 +500,23 @@ def not_found():
     html_ = html_.replace('<link rel="canonical" href="' + SITE + '/404">', '<meta name="robots" content="noindex">')
     open("404.html", "w", encoding="utf8").write(ext_links(html_))
 
+def build_alt_preview():
+    """PREVIEW ONLY: also write Option B (logo title card) at /option-b/ so both can be compared on a real screen. Never part of the live build."""
+    global HERO_STYLE
+    keep, HERO_STYLE = HERO_STYLE, "brand"
+    page = home()
+    HERO_STYLE = keep
+    page = page.replace('<link rel="canonical" href="' + SITE + '/">', '<meta name="robots" content="noindex,nofollow">')
+    page = page.replace('<body class="home nohero">', '<body class="home nohero"><div style="position:fixed;z-index:99;bottom:12px;right:12px;background:#e03939;color:#fff;font:600 13px/1 sans-serif;letter-spacing:.12em;padding:9px 12px">PREVIEW: OPTION B</div>',1)
+    os.makedirs("option-b", exist_ok=True)
+    open("option-b/index.html", "w", encoding="utf8").write(ext_links(page))
+
 def main():
     open("index.html", "w", encoding="utf8").write(ext_links(home()))
     write("/filmography/", filmography()); write("/biography/", biography()); write("/contact/", contact()); write("/writing/", writing_page()); write("/credits/", credits_page()); write("/projects/dallas-and-allegra/", da_page())
     for p in PROJECTS: write(f"/projects/{p['slug']}/", project(p))
     not_found()
+    if os.environ.get("ALT_PREVIEW") == "1": build_alt_preview()
     urls = ["/", "/filmography/", "/writing/", "/credits/", "/biography/", "/contact/", "/projects/dallas-and-allegra/"] + [f"/projects/{p['slug']}/" for p in PROJECTS]
     open("sitemap.xml", "w").write('<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n' + "".join(f"<url><loc>{SITE}{u}</loc><lastmod>{__import__('datetime').date.today().isoformat()}</lastmod></url>\n" for u in urls) + "</urlset>\n")
     open("robots.txt", "w").write(f"User-agent: *\nAllow: /\nSitemap: {SITE}/sitemap.xml\n")
