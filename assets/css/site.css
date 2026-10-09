@@ -172,8 +172,10 @@ footer p a[href^="mailto"]{color:inherit}
 .ptxt .eyebrow{letter-spacing:.3em}
 .plogo{margin:.2em 0 .5em;width:min(440px,100%)}.plogo img{width:100%;height:auto;display:block}
 .ptxt .lede{color:#eee;margin:0 0 1.1em}.ptxt p{margin:0 0 1em}.ptxt .btns{margin-top:1.4em}
-.bhero{--static:.16;--lines:.3;--flick:.02;position:relative;min-height:100vh;padding-top:var(--hh);display:flex;align-items:center;justify-content:center;text-align:center;overflow:hidden;background:#000}
-.bhero .scan{background:radial-gradient(ellipse at center,transparent 45%,rgba(0,0,0,.75) 100%)}
+.bhero{--static:.32;--lines:.32;--flick:.03;position:relative;min-height:100vh;padding-top:var(--hh);display:flex;align-items:center;justify-content:center;text-align:center;overflow:hidden;background:#000}
+.bhero::before{content:"";position:absolute;inset:0;background:radial-gradient(ellipse 78% 62% at 50% 46%,#6b4030 0%,#3a2118 34%,#150b08 66%,#000 100%)}
+.bhero::after{content:"";position:absolute;inset:0;background:#000;opacity:0;pointer-events:none;animation:flick .18s steps(2,end) infinite;z-index:1}
+@media(prefers-reduced-motion:reduce){.bhero::after{animation:none}}
 .bin{position:relative;z-index:2;padding:0 24px;max-width:900px}
 .blogo{margin:0 auto .4em;width:min(720px,84vw)}.blogo img{width:100%;height:auto;display:block}
 .bin .eyebrow{letter-spacing:.38em;margin:0 0 1.2em}.blede{font:italic 400 clamp(18px,2vw,24px)/1.55 'Playfair Display',serif;color:#ddd;max-width:640px;margin:0 auto}
