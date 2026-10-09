@@ -162,12 +162,21 @@ def bio_paras():
         f"""<p>For Penberth, storytelling is ultimately an exploration of what it means to be human, what breaks us, what connects us, and what we're willing to risk for something worth believing in.</p>""",
     ]
 
+def bio_short():
+    """Home-page version: Eva's opening paragraph verbatim, plus one paragraph assembled from sentences/facts in the full bio."""
+    n_aw = sum(len(v) for v in AWARDS.values())
+    full = bio_paras()
+    return [
+        full[0],
+        f"""<p>After moving to Los Angeles in 2000, Penberth spent 15 years as a unit production manager and first assistant director before shifting to writing and directing in 2015. His work has earned {n_aw} festival placements and awards, including two second-round selections at the Austin Film Festival for <em>Bathory</em> and <em>Ghosts of War</em>. He is currently developing <a href="/projects/dallas-and-allegra/">Dallas &amp; Allegra</a>, a contemporary Rust Belt reimagining of Romeo and Juliet, which he wrote and will direct.</p>""",
+    ]
+
 def about_home():
     return f"""<section class="about"><div class="wrap ab">
 <figure class="shot"><img src="/assets/img/headshot.jpg" alt="Black-and-white portrait of {NAME}, writer and director" width="900" height="1266" loading="lazy"></figure>
 <div class="abt"><p class="eyebrow">Writer &nbsp;|&nbsp; Director &nbsp;|&nbsp; Filmmaker</p><h2 class="serif nm">{NAME}</h2>
 <p class="lede">Stories about the choices that define us, the connections that shape us, and the lengths we'll go to for the things we love.</p>
-{"".join(bio_paras())}
+{"".join(bio_short())}
 <p class="rep">Represented by {MGR["name"]} &nbsp;|&nbsp; <a href="{MGR["url"]}" rel="noopener">{MGR["company"]}</a></p>
 <p class="btns"><a class="btn" href="/biography/">Read my story</a></p></div></div></section>"""
 
