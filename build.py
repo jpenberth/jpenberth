@@ -78,11 +78,11 @@ def thumb(p):
 
 def OG_FOR(path):
     """pick the share image for a page: its own if one was generated, else the home one"""
-    name = {"/": "og-home.jpg", "/filmography/": "og-filmography.jpg", "/writing/": "og-writing.jpg", "/credits/": "og-credits.jpg",
-            "/biography/": "og-biography.jpg", "/contact/": "og-contact.jpg", "/projects/dallas-and-allegra/": "og-dallas-and-allegra.jpg"}.get(path)
+    name = {"/": "og-v2-home.jpg", "/filmography/": "og-v2-filmography.jpg", "/writing/": "og-v2-writing.jpg", "/credits/": "og-v2-credits.jpg",
+            "/biography/": "og-v2-biography.jpg", "/contact/": "og-v2-contact.jpg", "/projects/dallas-and-allegra/": "og-dallas-and-allegra.jpg"}.get(path)
     if not name and path.startswith("/projects/"):
         name = "og-" + path.strip("/").split("/")[-1] + ".jpg"
-    return name if name and os.path.exists("assets/img/" + name) else "og-home.jpg"
+    return name if name and os.path.exists("assets/img/" + name) else "og-v2-home.jpg"
 
 def crumbs(*items):
     """items: (name, path) pairs after Home"""

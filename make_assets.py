@@ -43,6 +43,42 @@ def og_page(label, out):
     spaced(d, (96, 560), label.upper(), ImageFont.truetype(BOLD, 28), RED, 7)
     base.convert("RGB").save(f"{I}/{out}", quality=88, optimize=True)
 
+def glow_bg(w=1200, h=630, cx=0.5, cy=0.42):
+    """sepia glow on black with fine grain + vignette, matching the home title card"""
+    yy, xx = np.mgrid[0:h, 0:w]
+    d = np.sqrt(((xx - cx * w) / (w * 0.62)) ** 2 + ((yy - cy * h) / (h * 0.75)) ** 2)
+    stops = [(0, (107, 64, 48)), (0.35, (58, 33, 24)), (0.7, (21, 11, 8)), (1.0, (0, 0, 0))]
+    a = np.zeros((h, w, 3), "float32")
+    for (d0, c0), (d1, c1) in zip(stops, stops[1:]):
+        m = (d >= d0) & (d < d1); t = ((d - d0) / (d1 - d0))[m][:, None]
+        a[m] = np.array(c0) * (1 - t) + np.array(c1) * t
+    a += np.random.default_rng(11).normal(0, 6, (h, w))[..., None]
+    return Image.fromarray(np.clip(a, 0, 255).astype("uint8")).convert("RGBA")
+
+def og_v2(label, out, portrait=False):
+    base = glow_bg(cx=0.68 if portrait else 0.5)
+    logo = Image.open(f"{I}/logo-white.png").convert("RGBA")
+    if portrait:
+        hs = Image.open(f"{I}/headshot.jpg").convert("L")
+        hs = cover(hs, 480, 630, (0.5, 0.15))
+        a = np.asarray(hs).astype("float32")
+        fade = np.clip((480 - np.arange(480)) / 200, 0, 1)[None, :]
+        warm = np.stack([a * 1.0, a * 0.82, a * 0.72], -1)
+        ph = Image.fromarray(np.clip(warm, 0, 255).astype("uint8")).convert("RGBA")
+        ph.putalpha(Image.fromarray((fade * 255 * np.ones((630, 1))).astype("uint8")))
+        base.alpha_composite(ph, (0, 0))
+        lw, lx = 560, 570
+    else:
+        lw, lx = 640, 280
+    logo = logo.resize((lw, round(logo.height * lw / logo.width)), Image.LANCZOS)
+    ly = 215 if not portrait else 200
+    base.alpha_composite(logo, (lx, ly))
+    d = ImageDraw.Draw(base)
+    f = ImageFont.truetype(BOLD, 22)
+    txt = label.upper(); tw = sum(d.textlength(c, font=f) + 5 for c in txt) - 5
+    spaced(d, (lx + (lw - tw) / 2, ly + logo.height + 40), txt, f, RED, 5)
+    base.convert("RGB").save(f"{I}/{out}", quality=88, optimize=True)
+
 def og_film(title, src, out, focus=(0.5, 0.5)):
     base = cover(Image.open(src), 1200, 630, focus).convert("RGB")
     sh = Image.new("L", base.size, 0); g = ImageDraw.Draw(sh)
@@ -69,9 +105,11 @@ def favicons():
 
 if __name__ == "__main__":
     favicons()
-    for label, out in (("Director & Storyteller", "og-home.jpg"), ("Filmography", "og-filmography.jpg"), ("Writing", "og-writing.jpg"),
-                       ("Credits", "og-credits.jpg"), ("Biography", "og-biography.jpg"), ("Contact", "og-contact.jpg")):
-        og_page(label, out)
+    og_v2("Writer | Director | Filmmaker", "og-v2-home.jpg", True)
+    og_v2("Biography", "og-v2-biography.jpg", True)
+    for label, out in (("Filmography", "og-v2-filmography.jpg"), ("Writing", "og-v2-writing.jpg"),
+                       ("Credits", "og-v2-credits.jpg"), ("Contact", "og-v2-contact.jpg")):
+        og_v2(label, out)
     # Dallas & Allegra: its own key art, cropped to the share ratio (title sits near the top)
     cover(Image.open(f"{I}/da/hero-skyline-wide.jpg"), 1200, 630, (0.5, 0.12)).convert("RGB").save(f"{I}/og-dallas-and-allegra.jpg", quality=88, optimize=True)
     if os.path.exists(f"{I}/stills/almost-super.jpg"):
