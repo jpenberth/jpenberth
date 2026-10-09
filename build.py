@@ -509,15 +509,17 @@ def not_found():
     open("404.html", "w", encoding="utf8").write(ext_links(html_))
 
 def build_alt_preview():
-    """PREVIEW ONLY: also write Option B (logo title card) at /option-b/ so both can be compared on a real screen. Never part of the live build."""
+    """PREVIEW ONLY: also write the other first-screen options so they can be compared on a real screen. Never part of the live build."""
     global HERO_STYLE
-    keep, HERO_STYLE = HERO_STYLE, "brand"
-    page = home()
+    keep = HERO_STYLE
+    for style, folder, label in (("brand", "option-b", "PREVIEW: OPTION B"), ("combo", "option-c", "PREVIEW: OPTION C (COMBINED)")):
+        HERO_STYLE = style
+        page = home()
+        page = page.replace('<link rel="canonical" href="' + SITE + '/">', '<meta name="robots" content="noindex,nofollow">')
+        page = page.replace('<body class="home nohero">', '<body class="home nohero"><div style="position:fixed;z-index:99;bottom:12px;right:12px;background:#e03939;color:#fff;font:600 13px/1 sans-serif;letter-spacing:.12em;padding:9px 12px">' + label + '</div>', 1)
+        os.makedirs(folder, exist_ok=True)
+        open(folder + "/index.html", "w", encoding="utf8").write(ext_links(page))
     HERO_STYLE = keep
-    page = page.replace('<link rel="canonical" href="' + SITE + '/">', '<meta name="robots" content="noindex,nofollow">')
-    page = page.replace('<body class="home nohero">', '<body class="home nohero"><div style="position:fixed;z-index:99;bottom:12px;right:12px;background:#e03939;color:#fff;font:600 13px/1 sans-serif;letter-spacing:.12em;padding:9px 12px">PREVIEW: OPTION B</div>',1)
-    os.makedirs("option-b", exist_ok=True)
-    open("option-b/index.html", "w", encoding="utf8").write(ext_links(page))
 
 def main():
     open("index.html", "w", encoding="utf8").write(ext_links(home()))
