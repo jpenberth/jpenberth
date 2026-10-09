@@ -52,7 +52,8 @@ PROJECTS = [
 ]
 
 ALL_PROJECTS = PROJECTS
-PROJECTS = [p for p in ALL_PROJECTS if not p.get("hidden")]  # hidden ones keep their data but are not built
+FILM_ORDER = ["connected", "almost-super", "way-too-soon", "familiar-faces", "palm-springs-weekend"]   # strongest directing work first
+PROJECTS = sorted([p for p in ALL_PROJECTS if not p.get("hidden")], key=lambda p: FILM_ORDER.index(p["slug"]) if p["slug"] in FILM_ORDER else 99)  # hidden ones keep their data but are not built
 
 import re as _re
 def ext_links(h):
@@ -139,8 +140,8 @@ def write(path, content):
 def ld(obj): return '<script type="application/ld+json">' + json.dumps(obj, ensure_ascii=False) + "</script>\n"
 
 PERSON = {"@context": "https://schema.org", "@type": "Person", "@id": SITE + "/#person", "name": NAME,
-          "alternateName": ["Jason Penberth Rabold", "Jason Rabold", "J. Penberth"], "jobTitle": "Film Director",
-          "url": SITE, "image": SITE + "/assets/img/logo-black.png",
+          "alternateName": ["Jason Penberth Rabold", "Jason Rabold", "J. Penberth"], "jobTitle": ["Film Director", "Screenwriter"],
+          "url": SITE, "image": SITE + "/assets/img/headshot.jpg",
           "sameAs": [SUBSTACK, DA_SITE, IMDB, YT_DIRECTING, YT_PODCAST, INSTAGRAM, CATALYSTORY],
           "worksFor": {"@type": "Organization", "name": "Catalystory", "url": CATALYSTORY},
           "description": "Writer and director. 15+ years as a unit production manager and first assistant director in Los Angeles; writer of series and features; author of The Writer's Table newsletter.",
@@ -149,15 +150,27 @@ PERSON = {"@context": "https://schema.org", "@type": "Person", "@id": SITE + "/#
                            "areaServed": "US", "availableLanguage": "English"},
           "knowsAbout": ["Screenwriting", "Film directing", "Short films", "Music videos"]}
 
+def about_home():
+    return f"""<section class="about"><div class="wrap ab">
+<figure class="shot"><img src="/assets/img/headshot.jpg" alt="Black-and-white portrait of {NAME}, writer and director" width="900" height="1266" loading="lazy"></figure>
+<div class="abt"><p class="eyebrow">Writer &nbsp;|&nbsp; Director &nbsp;|&nbsp; Filmmaker</p><h2 class="serif nm">{NAME}</h2>
+<p class="lede">Stories about the choices that define us, the connections that shape us, and the lengths we'll go to for the things we love.</p>
+<p>{NAME} is a writer and director whose work explores the complexities of human connection, identity, love, and survival. Drawn to emotionally charged, character-driven storytelling, he creates worlds where ordinary people confront extraordinary circumstances.</p>
+<p>After 15 years as a unit production manager and first assistant director in Los Angeles, he turned to writing and directing, earning {sum(len(v) for v in AWARDS.values())} festival placements and awards, including two second-round selections at the Austin Film Festival. He is currently developing <a href="/projects/dallas-and-allegra/">Dallas &amp; Allegra</a>, a contemporary Rust Belt reimagining of Romeo and Juliet.</p>
+<p class="rep">Represented by {MGR["name"]} &nbsp;|&nbsp; <a href="{MGR["url"]}" rel="noopener">{MGR["company"]}</a></p>
+<p class="btns"><a class="btn" href="/biography/">Read my story</a></p></div></div></section>"""
+
+def slate_teaser():
+    li = "".join(f'<li><a href="/writing/"><span class="g">{esc(s["format"])} &middot; {esc(s["genre"])}</span><strong>{esc(s["title"])}</strong></a></li>' for s in SLATE)
+    return f"""<section class="wrap slt"><p class="eyebrow">The Writing</p><h2 class="serif">Original features, in development.</h2><ul class="tiles">{li}</ul><p><a class="more" href="/writing/">See the slate →</a></p></section>"""
+
 def home():
-    cards = "".join(card(p) for p in PROJECTS)
     acc = ["Connected — Runner-Up, Jury Prize · Filmmakers Collaboration Challenge 2019", "Connected — Runner-Up, Best Visuals · Filmmakers Collaboration Challenge 2019"]
     return head(f"{NAME} | Los Angeles Film Director & Writer", DESC, "/", ld(PERSON) + ld(WEBSITE) + '<link rel="preload" as="image" href="/assets/img/hero-poster.jpg" fetchpriority="high">\n') + f"""<body class="home">{header('/')}
 <div class="stage" aria-hidden="false"><video autoplay muted loop playsinline preload="auto" poster="/assets/img/hero-poster.jpg"><source src="/assets/video/hero.mp4" type="video/mp4"></video>
 <div class="tint"></div><canvas class="tv" aria-hidden="true"></canvas><div class="scan"></div><div class="roll"></div></div>
 <div class="intro"><h1 class="logo"><img src="/assets/img/logo-white.png" alt="{NAME}, film director, screenwriter and storyteller" width="1515" height="534"></h1></div>
-<main class="sheet"><section class="grid wrap"><h2 class="sr">Selected work</h2>{cards}</section>
-{story_home()}{da_feature()}{writing_teaser()}{signup()}</main>{footer()}"""
+<main class="sheet plain">{about_home()}{da_feature()}{slate_teaser()}{signup()}</main>{footer()}"""
 
 def filmography():
     cards = "".join(card(p) for p in PROJECTS)
@@ -262,21 +275,31 @@ def writing_teaser():
 PODCAST_EPS = [('WwXxVy-aCIQ', 'Writing What You See: Pittsburgh Novelist on Craft & Persistence', 'Patrick McGinty'), ('NxiY7GW6ylU', 'All Your F*cks Disappear at 40 (And Other Truths): Screenwriter Lauren Greenwood on Rejection', 'Lauren Greenwood'), ('o1eX88hF5Gk', 'When Church Breaks You: Pastor JP Robles on Creativity, Faith, and Why God Looks Up From the Bottom', 'JP Robles'), ('L6sN8k8ncDk', 'The Story That Drives Him: Donavan Clark on Passion, Perseverance, and Purpose', 'Donavan Clark'), ('CiraxMcO6k4', 'The Song That Saved His Life: Jacob Luttrell on Pain, Purpose, and Being a Superhero', 'Jacob Luttrell')]
 
 def writing_page():
-    eps_li = "".join(f'<li><a href="https://www.youtube.com/watch?v={i}" rel="noopener"><strong>{esc(t)}</strong><span class="b">Guest: {esc(g)}</span></a></li>' for i, t, g in PODCAST_EPS)
+    eps_li = "".join(f'<li><a href="https://www.youtube.com/watch?v={i}" rel="noopener"><strong>{esc(t)}</strong><span class="b">Guest: {esc(g)}</span></a></li>' for i, t, g in PODCAST_EPS[:3])
     ps = writing_posts()
-    li = "".join(f'<li><a href="{p["url"]}" rel="noopener"><span class="d">{fmt_date(p["date"])}</span><strong>{esc(p["title"])}</strong><span class="b">{esc(p["blurb"])}</span></a></li>' for p in ps)
+    li = "".join(f'<li><a href="{p["url"]}" rel="noopener"><span class="d">{fmt_date(p["date"])}</span><strong>{esc(p["title"])}</strong><span class="b">{esc(p["blurb"])}</span></a></li>' for p in ps[:5])
+    cards = ""
+    for s in SLATE:
+        pl = "".join(f'<li><b>{esc(r)}</b> {esc(c)}{(", " + y) if y else ""}</li>' for y, c, r in slate_placements(s["title"]))
+        note = f'<p class="snote">{esc(s["note"])}</p>' if s.get("note") else ""
+        cards += f'<article class="scard"><p class="g">{esc(s["format"])} &middot; {esc(s["genre"])}</p><h3 class="serif">{esc(s["title"])}</h3><p class="log">{esc(s["logline"])}</p>{note}{f"<ul class=place>{pl}</ul>" if pl else ""}</article>'
+    items = [{"@type": "ListItem", "position": i, "item": {"@type": "CreativeWork", "name": s["title"], "genre": s["genre"], "description": s["logline"], "author": {"@type": "Person", "name": NAME, "@id": SITE + "/#person"}}} for i, s in enumerate(SLATE, 1)]
+    slate_ld = ld({"@context": "https://schema.org", "@type": "ItemList", "name": "Screenwriting slate", "itemListElement": items})
     blog = {"@context": "https://schema.org", "@type": "Blog", "name": "The Writer's Table", "url": SUBSTACK, "author": {"@type": "Person", "name": NAME, "url": SITE},
             "blogPost": [{"@type": "BlogPosting", "headline": p["title"], "url": p["url"], "datePublished": p["date"], "author": {"@type": "Person", "name": NAME}} for p in ps]}
-    return head(f"Writing & Podcast | {NAME}, Screenwriter", "The Writer's Table newsletter and the What's Your Why podcast: screenwriting craft, structure, stakes and the working writer's life, by J. Penberth Rabold.", "/writing/", ld(blog) + crumbs(("Writing", "/writing/"))) + f"""<body>{header('/writing/')}
-<main class="wrap page narrow"><h1>Writing</h1>
-<p class="lede">I'm a writer first. <em>The Writer's Table</em> is my newsletter for screenwriters and storytellers: how stories work, why scripts fail, and what it takes to keep going. More than a thousand people read it.</p>
-<p class="btns"><a class="btn" href="{SUBSTACK}/subscribe" rel="noopener">Subscribe, it's free</a></p>
-<ul class="posts big">{li}</ul><p><a class="more" href="{SUBSTACK}/archive" rel="noopener">Full archive on Substack →</a></p>
+    return head(f"Screenwriting & Writing | {NAME}", f"The screenwriting slate of {NAME}: original feature films including Caketown, Winter in Budapest, Chasing Sky and Sinderella, plus craft writing.", "/writing/", slate_ld + ld(blog) + crumbs(("Writing", "/writing/"))) + f"""<body>{header('/writing/')}
+<main class="wrap page"><p class="eyebrow">Writing</p><h1 class="serif">The Slate</h1>
+<p class="lede wlede">Original feature films about love, loss and the lengths we go to. Scripts and materials are available to industry on request through my manager, <a href="/contact/">{MGR["name"]} at {MGR["company"]}</a>.</p>
+<section class="sgrid">{cards}</section>
+<div class="narrow notes"><p class="eyebrow">Also</p><h2 class="serif">The Writer's Table</h2>
+<p class="lede">My newsletter for screenwriters and storytellers: how stories work, why scripts fail, and what it takes to keep going.</p>
+<p class="btns"><a class="btn ghost" href="{SUBSTACK}/subscribe" rel="noopener">Subscribe, it's free</a></p>
+<ul class="posts">{li}</ul><p><a class="more" href="{SUBSTACK}/archive" rel="noopener">Full archive on Substack →</a></p>
 <div class="pod"><p class="eyebrow">Podcast</p><h2 class="serif">What's Your Why</h2>
 <p class="lede">What broke you made you beautiful.</p>
 <p>Real conversations with writers, musicians, directors, actors and creators about the fire that drives us, the fear that shapes us, and how both evolve.</p>
 <ul class="posts">{eps_li}</ul>
-<p><a class="more" href="{YT_PODCAST}" rel="noopener">All episodes on YouTube →</a></p></div></main>{signup()}{footer()}"""
+<p><a class="more" href="{YT_PODCAST}" rel="noopener">All episodes on YouTube →</a></p></div></div></main>{signup()}{footer()}"""
 
 def da_page():
     path = "/projects/dallas-and-allegra/"
@@ -375,6 +398,22 @@ AWARDS = {
   ("2022", "5th Annual Female Driven Screenwriting Contest", "Quarter-Finalist", "Bathory"),
  ],
 }
+
+# --- Writing slate: public-safe fields only (title, format, genre, logline). No deal status, reps or company names from the private one-sheet.
+SLATE = [
+ dict(title="Caketown", format="Feature Film", genre="Romantic Crime Drama",
+      logline="A modern-day Rust Belt Romeo and Juliet centered on Dallas Dixon, a fallen athlete-turned-dealer, who meets Allegra Cunningham, a high school senior with the right zip code, searching for something real. Together, they learn that love destroys all."),
+ dict(title="Winter in Budapest", format="Feature Film", genre="Romantic Drama",
+      logline="After the death of his sister, a man long committed to emotional distance is drawn into the trail of letters she has left behind, a journey through Budapest that becomes both a family reckoning and a reckoning with the life he has spent avoiding. Along the way, he discovers an estranged grandfather, an unexpected love, and the possibility that to remain present with another person is its own kind of courage."),
+ dict(title="Chasing Sky", format="Feature Film", genre="Survival Drama", note="In development",
+      logline="Reeling from the tragic death of his daughter, and secluded in a firewatch cabin deep in a most beautiful Montana setting, a former hotshot firefighter gets caught in a massive storm that destroys his cabin, forcing him to journey across the Montana wilderness to return to the one place he doesn't want to go."),
+ dict(title="Sinderella", format="Feature Film", genre="Horror / Body Horror / Feminist Revenge", note="Concept development",
+      logline="A young woman exploited by the sex industry takes a deal with a supernatural force, gaining monstrous power for one night to destroy the men who profit from her pain. The revenge is everything she wanted. The cost is everything she was."),
+]
+_RANK = {"Winner": 0, "Finalist": 1, "Honorable Mention": 2, "Semi-Finalist": 3, "Quarter-Finalist": 4}
+def slate_placements(title):
+    rows = [(y, c, r) for y, c, r, p in AWARDS["Screenplays"] if p == title and r in _RANK]
+    return sorted(rows, key=lambda x: (_RANK[x[2]], x[0] == "", x[1]))
 
 def awards_section():
     n = sum(len(v) for v in AWARDS.values())
