@@ -196,6 +196,14 @@ def hero_brand():
 {"".join(bio_short())}
 <p class="btns"><a class="btn" href="/biography/">Read my story</a></p></div></div></section>"""
 
+def hero_combo():
+    """Option C: Option B's title card (slow grain) on first load; scrolling reveals the portrait fading into the bio, as in Option A."""
+    card = hero_brand().split('<section class="about"')[0]
+    return card + f"""<section class="pbio" id="about"><figure class="pfig"><img src="/assets/img/headshot.jpg" alt="Black-and-white portrait of {NAME}, writer and director" width="900" height="1266" loading="lazy"></figure>
+<div class="ptxt"><h2 class="serif nm">{NAME}</h2>
+{"".join(bio_short())}
+<p class="btns"><a class="btn" href="/biography/">Read my story</a></p></div></section>"""
+
 def about_home():
     return f"""<section class="about"><div class="wrap ab">
 <figure class="shot"><img src="/assets/img/headshot.jpg" alt="Black-and-white portrait of {NAME}, writer and director" width="900" height="1266" loading="lazy"></figure>
@@ -216,7 +224,7 @@ def slate_teaser():
 
 def home():
     acc = []
-    hero = hero_portrait() if HERO_STYLE == "portrait" else hero_brand()
+    hero = {"portrait": hero_portrait, "brand": hero_brand, "combo": hero_combo}[HERO_STYLE]()
     pre = '<link rel="preload" as="image" href="/assets/img/headshot.jpg" fetchpriority="high">\n' if HERO_STYLE == "portrait" else ""
     return head(f"{NAME} | Los Angeles Film Director & Writer", DESC, "/", ld(PERSON) + ld(WEBSITE) + pre) + f"""<body class="home nohero">{header('/')}
 <main class="sheet plain">{hero}{broken_band()}{da_feature()}{slate_teaser()}{signup()}</main>{footer()}"""
