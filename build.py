@@ -155,14 +155,18 @@ def about_home():
 <figure class="shot"><img src="/assets/img/headshot.jpg" alt="Black-and-white portrait of {NAME}, writer and director" width="900" height="1266" loading="lazy"></figure>
 <div class="abt"><p class="eyebrow">Writer &nbsp;|&nbsp; Director &nbsp;|&nbsp; Filmmaker</p><h2 class="serif nm">{NAME}</h2>
 <p class="lede">Stories about the choices that define us, the connections that shape us, and the lengths we'll go to for the things we love.</p>
-<p>{NAME} is a writer and director whose work explores the complexities of human connection, identity, love, and survival. Drawn to emotionally charged, character-driven storytelling, he creates worlds where ordinary people confront extraordinary circumstances.</p>
-<p>After 15 years as a unit production manager and first assistant director in Los Angeles, he turned to writing and directing, earning {sum(len(v) for v in AWARDS.values())} festival placements and awards, including two second-round selections at the Austin Film Festival. He is currently developing <a href="/projects/dallas-and-allegra/">Dallas &amp; Allegra</a>, a contemporary Rust Belt reimagining of Romeo and Juliet.</p>
+<p>{NAME} is a writer and director whose work explores the complexities of human connection, identity, love, and survival. Drawn to emotionally charged, character-driven storytelling, he creates worlds where ordinary people confront extraordinary circumstances, and where the most compelling conflicts are often the ones unfolding within.</p>
+<p>His approach to filmmaking is rooted in more than two decades of experience in the entertainment industry. After moving to Los Angeles in 2000, Penberth spent 15 years working as a unit production manager and first assistant director across feature films, short films, and music videos. That experience gave him an understanding of filmmaking from the ground up, shaping a creative philosophy that balances ambitious storytelling with the realities of bringing a vision to the screen.</p>
+<p>In 2015, he shifted his focus to writing and directing, developing original feature films, television pilots, and series. His work has earned {sum(len(v) for v in AWARDS.values())} festival placements and awards across writing and directing, including two second-round selections at the Austin Film Festival for <em>Bathory</em> and <em>Ghosts of War</em>. His screenplays and television projects have also attracted consideration from major entertainment companies, including Netflix, Apple, Starz, and HBO.</p>
+<p>As a director, Penberth brings a visually grounded, emotionally intimate approach to storytelling. His short film <em>Connected</em>, which explores the fragile relationship between a daughter and her father in an increasingly digital world, received runner-up recognition for both the Jury Prize and Best Visuals at the 2019 Filmmakers Collaboration Challenge. His directing work also includes the music videos <em>Way Too Soon</em> and <em>Familiar Faces</em>.</p>
+<p>His current slate spans romantic drama, psychological horror, survival thrillers, and character-driven television, united by a fascination with human vulnerability, moral complexity, and the pursuit of connection. He is currently developing <a href="/projects/dallas-and-allegra/">Dallas &amp; Allegra</a>, a contemporary Rust Belt reimagining of Romeo and Juliet, which he wrote and will direct. Set against a landscape of economic hardship, addiction, and divided social worlds, the film explores the collision of love, loyalty, and circumstance.</p>
+<p>For Penberth, storytelling is ultimately an exploration of what it means to be human, what breaks us, what connects us, and what we're willing to risk for something worth believing in.</p>
 <p class="rep">Represented by {MGR["name"]} &nbsp;|&nbsp; <a href="{MGR["url"]}" rel="noopener">{MGR["company"]}</a></p>
 <p class="btns"><a class="btn" href="/biography/">Read my story</a></p></div></div></section>"""
 
 def slate_teaser():
     li = "".join(f'<li><a href="/writing/"><span class="g">{esc(s["format"])} &middot; {esc(s["genre"])}</span><strong>{esc(s["title"])}</strong></a></li>' for s in SLATE)
-    return f"""<section class="wrap slt"><p class="eyebrow">The Writing</p><h2 class="serif">Original features, in development.</h2><ul class="tiles">{li}</ul><p><a class="more" href="/writing/">See the slate →</a></p></section>"""
+    return f"""<section class="wrap slt"><p class="eyebrow">The Writing</p><h2 class="serif">Original film and television.</h2><ul class="tiles">{li}</ul><p><a class="more" href="/writing/">See the slate →</a></p></section>"""
 
 def home():
     acc = ["Connected — Runner-Up, Jury Prize · Filmmakers Collaboration Challenge 2019", "Connected — Runner-Up, Best Visuals · Filmmakers Collaboration Challenge 2019"]
@@ -278,19 +282,17 @@ def writing_page():
     eps_li = "".join(f'<li><a href="https://www.youtube.com/watch?v={i}" rel="noopener"><strong>{esc(t)}</strong><span class="b">Guest: {esc(g)}</span></a></li>' for i, t, g in PODCAST_EPS[:3])
     ps = writing_posts()
     li = "".join(f'<li><a href="{p["url"]}" rel="noopener"><span class="d">{fmt_date(p["date"])}</span><strong>{esc(p["title"])}</strong><span class="b">{esc(p["blurb"])}</span></a></li>' for p in ps[:5])
-    cards = ""
-    for s in SLATE:
-        pl = "".join(f'<li><b>{esc(r)}</b> {esc(c)}{(", " + y) if y else ""}</li>' for y, c, r in slate_placements(s["title"]))
-        note = f'<p class="snote">{esc(s["note"])}</p>' if s.get("note") else ""
-        cards += f'<article class="scard"><p class="g">{esc(s["format"])} &middot; {esc(s["genre"])}</p><h3 class="serif">{esc(s["title"])}</h3><p class="log">{esc(s["logline"])}</p>{note}{f"<ul class=place>{pl}</ul>" if pl else ""}</article>'
+    def _card(s):
+        return f'<article class="scard"><p class="g">{esc(s["format"])} &middot; {esc(s["genre"])}</p><h3 class="serif">{esc(s["title"])}</h3><p class="log">{esc(s["logline"])}</p></article>'
+    cards = "".join(f'<h2 class="sgroup">{g}</h2><section class="sgrid">{"".join(_card(s) for s in SLATE if s["group"] == g)}</section>' for g in ("Film", "Television"))
     items = [{"@type": "ListItem", "position": i, "item": {"@type": "CreativeWork", "name": s["title"], "genre": s["genre"], "description": s["logline"], "author": {"@type": "Person", "name": NAME, "@id": SITE + "/#person"}}} for i, s in enumerate(SLATE, 1)]
     slate_ld = ld({"@context": "https://schema.org", "@type": "ItemList", "name": "Screenwriting slate", "itemListElement": items})
     blog = {"@context": "https://schema.org", "@type": "Blog", "name": "The Writer's Table", "url": SUBSTACK, "author": {"@type": "Person", "name": NAME, "url": SITE},
             "blogPost": [{"@type": "BlogPosting", "headline": p["title"], "url": p["url"], "datePublished": p["date"], "author": {"@type": "Person", "name": NAME}} for p in ps]}
-    return head(f"Screenwriting & Writing | {NAME}", f"The screenwriting slate of {NAME}: original feature films including Caketown, Winter in Budapest, Chasing Sky and Sinderella, plus craft writing.", "/writing/", slate_ld + ld(blog) + crumbs(("Writing", "/writing/"))) + f"""<body>{header('/writing/')}
+    return head(f"Screenwriting & Writing | {NAME}", f"The screenwriting slate of {NAME}: original features and series including Caketown, Winter in Budapest, Bathory, The Awakening and Erasing Chayse.", "/writing/", slate_ld + ld(blog) + crumbs(("Writing", "/writing/"))) + f"""<body>{header('/writing/')}
 <main class="wrap page"><p class="eyebrow">Writing</p><h1 class="serif">The Slate</h1>
-<p class="lede wlede">Original feature films about love, loss and the lengths we go to. Scripts and materials are available to industry on request through my manager, <a href="/contact/">{MGR["name"]} at {MGR["company"]}</a>.</p>
-<section class="sgrid">{cards}</section>
+<p class="lede wlede">Original feature films and television series about love, loss and the lengths we go to. Scripts and materials are available to industry on request through my manager, <a href="/contact/">{MGR["name"]} at {MGR["company"]}</a>.</p>
+{cards}
 <div class="narrow notes"><p class="eyebrow">Also</p><h2 class="serif">The Writer's Table</h2>
 <p class="lede">My newsletter for screenwriters and storytellers: how stories work, why scripts fail, and what it takes to keep going.</p>
 <p class="btns"><a class="btn ghost" href="{SUBSTACK}/subscribe" rel="noopener">Subscribe, it's free</a></p>
@@ -401,19 +403,21 @@ AWARDS = {
 
 # --- Writing slate: public-safe fields only (title, format, genre, logline). No deal status, reps or company names from the private one-sheet.
 SLATE = [
- dict(title="Caketown", format="Feature Film", genre="Romantic Crime Drama",
+ dict(group="Film", title="Caketown", format="Feature Film", genre="Romantic Crime Drama",
       logline="A modern-day Rust Belt Romeo and Juliet centered on Dallas Dixon, a fallen athlete-turned-dealer, who meets Allegra Cunningham, a high school senior with the right zip code, searching for something real. Together, they learn that love destroys all."),
- dict(title="Winter in Budapest", format="Feature Film", genre="Romantic Drama",
+ dict(group="Film", title="Winter in Budapest", format="Feature Film", genre="Romantic Drama",
       logline="After the death of his sister, a man long committed to emotional distance is drawn into the trail of letters she has left behind, a journey through Budapest that becomes both a family reckoning and a reckoning with the life he has spent avoiding. Along the way, he discovers an estranged grandfather, an unexpected love, and the possibility that to remain present with another person is its own kind of courage."),
- dict(title="Chasing Sky", format="Feature Film", genre="Survival Drama", note="In development",
+ dict(group="Film", title="Chasing Sky", format="Feature Film", genre="Survival Drama",
       logline="Reeling from the tragic death of his daughter, and secluded in a firewatch cabin deep in a most beautiful Montana setting, a former hotshot firefighter gets caught in a massive storm that destroys his cabin, forcing him to journey across the Montana wilderness to return to the one place he doesn't want to go."),
- dict(title="Sinderella", format="Feature Film", genre="Horror / Body Horror / Feminist Revenge", note="Concept development",
-      logline="A young woman exploited by the sex industry takes a deal with a supernatural force, gaining monstrous power for one night to destroy the men who profit from her pain. The revenge is everything she wanted. The cost is everything she was."),
+ dict(group="Television", title="Bathory", format="TV Series", genre="Elevated Drama / Thriller",
+      logline="History's deadliest serial killer was a woman. The extraordinary true story of Erzebet Bathory, a brilliant and beautiful Hungarian Countess and one of the most powerful figures in 16th-century Europe, whose legacy became that of history's deadliest serial killer. Sexy, bold and transgressive: was she a monster, or a maligned figure?"),
+ dict(group="Television", title="The Awakening", format="TV Series", genre="Elevated Sci-Fi Drama",
+      logline="Haunted by violent sleepwalking and recurring dreams of a mysterious woman, astrophysicist Aidan Tellman discovers a terrifying anomaly spreading across Los Angeles, one that may signal the collapse of reality itself. As ancient supernatural forces gather around him, Aidan is drawn into a hidden war in this modern reimagining of Dante's Divine Comedy."),
+ dict(group="Television", title="Erasing Chayse", format="TV Pilot", genre="Action / Thriller",
+      logline="Chayse Anderson has the perfect life: a beautiful home in the Hollywood Hills, two teenage daughters, a devoted husband, and a standing yoga class with the other soccer moms. She's also a world-class assassin, and as her past starts closing in on the life she's built, she'll have to decide how far she'll go to protect the family who has no idea who she really is."),
+ dict(group="Television", title="Ghosts of War: Operation Fortitude", format="TV Anthology Series", genre="Historical Drama",
+      logline="The untold story of how the CIA was born during World War II: the U.S.-trained French Resistance men and women who bled and died to turn the tide of the war, and gave birth to the modern CIA."),
 ]
-_RANK = {"Winner": 0, "Finalist": 1, "Honorable Mention": 2, "Semi-Finalist": 3, "Quarter-Finalist": 4}
-def slate_placements(title):
-    rows = [(y, c, r) for y, c, r, p in AWARDS["Screenplays"] if p == title and r in _RANK]
-    return sorted(rows, key=lambda x: (_RANK[x[2]], x[0] == "", x[1]))
 
 def awards_section():
     n = sum(len(v) for v in AWARDS.values())

@@ -144,3 +144,10 @@ footer p a[href^="mailto"]{color:inherit}
 .place{list-style:none;margin:0;padding:14px 0 0;border-top:1px solid #1c1c1c;color:var(--mut);font-size:15px}.place li{padding:2px 0}.place b{color:#fff;font-weight:400;margin-right:4px}
 .notes{padding-top:20px;border-top:1px solid #1c1c1c}.notes>.eyebrow{margin-top:60px}.notes>h2{font-size:clamp(24px,3vw,32px);margin:.1em 0 .4em}
 @media(max-width:900px){.ab{grid-template-columns:1fr;gap:34px}.shot{max-width:340px}.tiles{grid-template-columns:1fr 1fr}.sgrid{grid-template-columns:1fr}.about{padding:80px 0 70px}}
+
+/* --- rework: longer bio beside a sticky headshot; film + TV slate --- */
+.ab{align-items:start}.shot{position:sticky;top:40px}
+.tiles{grid-template-columns:repeat(auto-fit,minmax(210px,1fr))}
+.sgroup{font:600 26px 'Barlow Condensed',sans-serif;letter-spacing:.2em;text-transform:uppercase;color:var(--red);margin:56px 0 0}
+.sgroup+.sgrid{margin-top:18px;margin-bottom:0}.sgrid+.sgroup{margin-top:56px}.sgrid:last-of-type{margin-bottom:90px}
+@media(max-width:900px){.shot{position:static}}
