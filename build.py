@@ -150,17 +150,24 @@ PERSON = {"@context": "https://schema.org", "@type": "Person", "@id": SITE + "/#
                            "areaServed": "US", "availableLanguage": "English"},
           "knowsAbout": ["Screenwriting", "Film directing", "Short films", "Music videos"]}
 
+def bio_paras():
+    """Eva's full bio, the single source used by BOTH the home page and the Biography page."""
+    n_aw = sum(len(v) for v in AWARDS.values())
+    return [
+        f"""<p>{NAME} is a writer and director whose work explores the complexities of human connection, identity, love, and survival. Drawn to emotionally charged, character-driven storytelling, he creates worlds where ordinary people confront extraordinary circumstances, and where the most compelling conflicts are often the ones unfolding within.</p>""",
+        f"""<p>His approach to filmmaking is rooted in more than two decades of experience in the entertainment industry. After moving to Los Angeles in 2000, Penberth spent 15 years working as a unit production manager and first assistant director across feature films, short films, and music videos. That experience gave him an understanding of filmmaking from the ground up, shaping a creative philosophy that balances ambitious storytelling with the realities of bringing a vision to the screen.</p>""",
+        f"""<p>In 2015, he shifted his focus to writing and directing, developing original feature films, television pilots, and series. His work has earned {n_aw} festival placements and awards across writing and directing, including two second-round selections at the Austin Film Festival for <em>Bathory</em> and <em>Ghosts of War</em>. His screenplays and television projects have also attracted consideration from major entertainment companies, including Netflix, Apple, Starz, and HBO.</p>""",
+        f"""<p>As a director, Penberth brings a visually grounded, emotionally intimate approach to storytelling. His short film <em>Connected</em>, which explores the fragile relationship between a daughter and her father in an increasingly digital world, received runner-up recognition for both the Jury Prize and Best Visuals at the 2019 Filmmakers Collaboration Challenge. His directing work also includes the music videos <em>Way Too Soon</em> and <em>Familiar Faces</em>.</p>""",
+        f"""<p>His current slate spans romantic drama, psychological horror, survival thrillers, and character-driven television, united by a fascination with human vulnerability, moral complexity, and the pursuit of connection. He is currently developing <a href="/projects/dallas-and-allegra/">Dallas &amp; Allegra</a>, a contemporary Rust Belt reimagining of Romeo and Juliet, which he wrote and will direct. Set against a landscape of economic hardship, addiction, and divided social worlds, the film explores the collision of love, loyalty, and circumstance.</p>""",
+        f"""<p>For Penberth, storytelling is ultimately an exploration of what it means to be human, what breaks us, what connects us, and what we're willing to risk for something worth believing in.</p>""",
+    ]
+
 def about_home():
     return f"""<section class="about"><div class="wrap ab">
 <figure class="shot"><img src="/assets/img/headshot.jpg" alt="Black-and-white portrait of {NAME}, writer and director" width="900" height="1266" loading="lazy"></figure>
 <div class="abt"><p class="eyebrow">Writer &nbsp;|&nbsp; Director &nbsp;|&nbsp; Filmmaker</p><h2 class="serif nm">{NAME}</h2>
 <p class="lede">Stories about the choices that define us, the connections that shape us, and the lengths we'll go to for the things we love.</p>
-<p>{NAME} is a writer and director whose work explores the complexities of human connection, identity, love, and survival. Drawn to emotionally charged, character-driven storytelling, he creates worlds where ordinary people confront extraordinary circumstances, and where the most compelling conflicts are often the ones unfolding within.</p>
-<p>His approach to filmmaking is rooted in more than two decades of experience in the entertainment industry. After moving to Los Angeles in 2000, Penberth spent 15 years working as a unit production manager and first assistant director across feature films, short films, and music videos. That experience gave him an understanding of filmmaking from the ground up, shaping a creative philosophy that balances ambitious storytelling with the realities of bringing a vision to the screen.</p>
-<p>In 2015, he shifted his focus to writing and directing, developing original feature films, television pilots, and series. His work has earned {sum(len(v) for v in AWARDS.values())} festival placements and awards across writing and directing, including two second-round selections at the Austin Film Festival for <em>Bathory</em> and <em>Ghosts of War</em>. His screenplays and television projects have also attracted consideration from major entertainment companies, including Netflix, Apple, Starz, and HBO.</p>
-<p>As a director, Penberth brings a visually grounded, emotionally intimate approach to storytelling. His short film <em>Connected</em>, which explores the fragile relationship between a daughter and her father in an increasingly digital world, received runner-up recognition for both the Jury Prize and Best Visuals at the 2019 Filmmakers Collaboration Challenge. His directing work also includes the music videos <em>Way Too Soon</em> and <em>Familiar Faces</em>.</p>
-<p>His current slate spans romantic drama, psychological horror, survival thrillers, and character-driven television, united by a fascination with human vulnerability, moral complexity, and the pursuit of connection. He is currently developing <a href="/projects/dallas-and-allegra/">Dallas &amp; Allegra</a>, a contemporary Rust Belt reimagining of Romeo and Juliet, which he wrote and will direct. Set against a landscape of economic hardship, addiction, and divided social worlds, the film explores the collision of love, loyalty, and circumstance.</p>
-<p>For Penberth, storytelling is ultimately an exploration of what it means to be human, what breaks us, what connects us, and what we're willing to risk for something worth believing in.</p>
+{"".join(bio_paras())}
 <p class="rep">Represented by {MGR["name"]} &nbsp;|&nbsp; <a href="{MGR["url"]}" rel="noopener">{MGR["company"]}</a></p>
 <p class="btns"><a class="btn" href="/biography/">Read my story</a></p></div></div></section>"""
 
@@ -190,17 +197,17 @@ def filmography():
 def biography():
     stats = [("15+", "years as a UPM &amp; 1st AD"), (str(sum(len(v) for v in AWARDS.values())), "festival placements &amp; awards, writing and directing"), ("2×", "Austin Film Festival second round, <em>Bathory</em> &amp; <em>Ghosts of War</em>"), ("13K+", "followers on Instagram"), ("1,000+", "readers of The Writer's Table")]
     st = "".join(f'<div><b>{a}</b><span>{c}</span></div>' for a, c in stats)
+    _bio = bio_paras()
     return head(f"Biography | {NAME}, Writer & Director", f"About {NAME}: a Los Angeles and Pittsburgh writer and director who spent 15 years running film sets and now makes the stories he writes.", "/biography/", ld(PERSON) + crumbs(("Biography", "/biography/"))) + f"""<body>{header('/biography/')}
 <main class="wrap page narrow"><p class="eyebrow">Biography</p><h1 class="serif">{NAME}</h1>
-<p class="lede">Writer. Director. Storyteller.</p>
-<p>I moved to Los Angeles in 2000 because I wanted to make movies. That was the whole plan. The problem was, I had nothing to say yet. No real voice, no story that was mine. So I learned how movies get made. For fifteen years I worked as a unit production manager and first assistant director, with some editing along the way, on music videos, shorts and features. I learned what a story actually costs once it has to stand up on a set.</p>
-<p>Writing never went away. In 2015 I stopped doing it on the side and made it the job. Since then I've written series bibles, pilots and features that have landed on desks at Netflix, Apple, Starz and HBO. I've come close, and I've come close a lot: a show that went down to the wire, a film that stalled at the finish line. I know exactly what &ldquo;almost&rdquo; feels like. I also know it isn't the end of the story.</p>
+<p class="lede">Stories about the choices that define us, the connections that shape us, and the lengths we'll go to for the things we love.</p>
+{_bio[0]}{_bio[1]}{_bio[2]}
 <div class="stats">{st}</div>
-<p>Along the way I directed <a href="/projects/connected/">Connected</a>, a short about a young woman struggling to find an authentic connection with her father in a technologically connected world. It was a Runner-Up for both the Jury Prize and Best Visuals at the 2019 Filmmakers Collaboration Challenge. I developed the series <em>Ghosts of War</em>, a second-round selection at the Austin Film Festival, and I've directed music videos for my friend Jacob Luttrell, including <a href="/projects/way-too-soon/">Way Too Soon</a> and <a href="/projects/familiar-faces/">Familiar Faces</a>.</p>
-<p>I believe storytelling is about human connection. I'm drawn to stories about the human experience, in worlds far beyond our own or the past, where characters are put in situations that force them to discover their own self-empowerment. Stories that start a conversation about emotion and truth, and the love that makes us want to survive.</p>
-<p>Right now that story is <a href="/projects/dallas-and-allegra/">Dallas &amp; Allegra</a>, a Rust Belt Romeo and Juliet, and the first film I'm making by asking the people who believe in it to help get it made. No gatekeeper, no executive across the table. I'm also studying Film &amp; TV Writing at LA Film School and writing <a href="/writing/">The Writer's Table</a>, a newsletter for screenwriters who are trying to finish what they start.</p>
+{_bio[3]}{_bio[4]}{_bio[5]}
+<p class="rep bio-rep">Represented by {MGR["name"]} &nbsp;|&nbsp; <a href="{MGR["url"]}" rel="noopener">{MGR["company"]}</a></p>
 <p class="quote">Write truth... inspire love.</p>
-<p class="verify"><a href="/filmography/">See the films →</a> &nbsp;·&nbsp; <a href="/credits/">All credits →</a> &nbsp;·&nbsp; <a href="{IMDB}" rel="me noopener">IMDb</a> &nbsp;·&nbsp; <a href="{CATALYSTORY}" rel="noopener">Catalystory</a></p></main>{footer()}"""
+<p class="verify"><a href="/filmography/">See the films →</a> &nbsp;·&nbsp; <a href="/credits/">All credits →</a> &nbsp;·&nbsp; <a href="{IMDB}" rel="me noopener">IMDb</a> &nbsp;·&nbsp; <a href="{CATALYSTORY}" rel="noopener">Catalystory</a></p>
+</main>{footer()}"""
 
 def contact():
     topics = ["Bookings / directing", "Writing / scripts", "Production", "Press", "Something else"]
