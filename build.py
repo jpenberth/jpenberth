@@ -187,7 +187,7 @@ def hero_portrait():
 
 def hero_brand():
     """Option B: no photo or video up top, just the signature as a title card with film grain; the portrait follows below."""
-    return f"""<section class="bhero"><canvas class="tv" data-interval="1700" aria-hidden="true"></canvas><div class="scan"></div>
+    return f"""<section class="bhero"><canvas class="tv" data-interval="10000" data-fade="4000" aria-hidden="true"></canvas><div class="scan"></div>
 <div class="bin"><h1 class="blogo"><img src="/assets/img/logo-white.png" alt="{NAME}, film director, screenwriter and storyteller" width="1515" height="534" fetchpriority="high"></h1>
 <p class="eyebrow">{KICKER}</p><p class="blede">{TAGLINE}</p></div><a class="cue" href="#about" aria-label="Scroll to the introduction">&darr;</a></section>
 <section class="about" id="about"><div class="wrap ab">
