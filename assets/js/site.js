@@ -7,7 +7,8 @@ const rm=matchMedia('(prefers-reduced-motion: reduce)');
 const W=640,H=360;cv.width=W;cv.height=H;const x=cv.getContext('2d'),img=x.createImageData(W,H),d=img.data;
 function frame(){for(let i=0;i<d.length;i+=4){const v=Math.random()*255;d[i]=d[i+1]=d[i+2]=v;d[i+3]=255}x.putImageData(img,0,0)}
 frame();if(rm.matches)return;
-let last=0;(function loop(t){if(!document.hidden&&t-last>80){frame();last=t}requestAnimationFrame(loop)})(0)})();
+const iv=+cv.dataset.interval||80;                          // ms between grain frames; Option B uses a very slow 1700
+let last=0;(function loop(t){if(!document.hidden&&t-last>iv){frame();last=t}requestAnimationFrame(loop)})(0)})();
 
 // contact form: posts to a Google Apps Script web app (rows land in a Google Sheet); falls back to the visitor's email app until an endpoint is set
 (()=>{const f=document.getElementById('contact-form');if(!f)return;
